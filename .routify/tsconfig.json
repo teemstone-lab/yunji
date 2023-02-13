@@ -1,0 +1,8 @@
+
+{
+
+  "compilerOptions": {
+
+  },
+  "exclude": ["./config.js","routes.js"],
+}
