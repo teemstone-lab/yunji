@@ -1,8 +1,7 @@
 <script lang="ts">
 	let count = 0;
 
-	const a = 1;
-
+	const a = 2;
 	const clickHandler = () => {
 		count += 1;
 	};
