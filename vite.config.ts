@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import sveltePreprocess from 'svelte-preprocess';
 
+import { resolve } from 'path';
 import { createHtmlPlugin } from 'vite-plugin-html';
 // import wasm from 'vite-plugin-wasm';
 // import topLevelAwait from 'vite-plugin-top-level-await';
@@ -25,5 +26,12 @@ export default defineConfig({
 	base: '.',
 	build: {
 		target: 'esnext',
+	},
+	resolve: {
+		dedupe: ['@roxi/routify'],
+		alias: {
+			svelte: resolve(__dirname, 'node_modules/svelte'),
+			'@': resolve(__dirname, './src'),
+		},
 	},
 });
