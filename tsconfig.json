@@ -61,7 +61,7 @@
 	"exclude": [
 		".routify/*",
 		"node_modules/*",
-		"dist/*",
+		// "dist/*",
 		".svelte/*",
 		".svelte-kit/*",
 		"build/*",
