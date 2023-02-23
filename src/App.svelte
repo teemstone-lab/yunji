@@ -4,6 +4,7 @@
 	import Markup1 from './pages/markup/html1.svelte';
 	import Markup2 from './pages/markup/html2.svelte';
 	import Markup3 from './pages/markup/html3.svelte';
+	import Nav from './components/nav/Nav.svelte';
 
 	type ClickEvent = MouseEvent & {
 		currentTarget: EventTarget & HTMLButtonElement;
@@ -19,6 +20,7 @@
 	<li><button on:click="{clickHandler}">markup/markup2</button></li>
 	<li><button on:click="{clickHandler}">markup/markup3</button></li>
 </ul>
+<Nav />
 
 <main>
 	{#if currentPage === 'index'}
