@@ -15,12 +15,7 @@
 	};
 </script>
 
-<ul>
-	<li><button on:click="{clickHandler}">markup/markup1</button></li>
-	<li><button on:click="{clickHandler}">markup/markup2</button></li>
-	<li><button on:click="{clickHandler}">markup/markup3</button></li>
-</ul>
-<Nav />
+<Nav clickHandler="{clickHandler}" />
 
 <main>
 	{#if currentPage === 'index'}

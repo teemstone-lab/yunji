@@ -1,9 +1,3 @@
-<script>
-	import Nav from '../../components/nav/Nav.svelte';
-</script>
-
-<Nav />
-
 <header>
 	<h1>Day Yoga</h1>
 	<p>예쁜몸매 만들기 프로젝트</p>

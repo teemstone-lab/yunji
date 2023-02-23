@@ -1,9 +1,3 @@
-<script>
-	import Nav from '../../components/nav/Nav.svelte';
-</script>
-
-<Nav />
-
 <header>
 	<h1><span>1년 내내 즐기는</span> 디팜농장의 농산물</h1>
 </header>

@@ -1,9 +1,3 @@
-<script>
-	import Nav from '../../components/nav/Nav.svelte';
-</script>
-
-<Nav />
-
 <header>
 	<h1>더블제이학원 <span>수학/과학</span></h1>
 	<p><span>우리아이 맞춤학습</span><strong>끝판왕</strong></p>
