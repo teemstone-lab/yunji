@@ -19,7 +19,9 @@
 
 <main>
 	{#if currentPage === 'index'}
-		<Index />
+		<div class="px-4">
+			<Index />
+		</div>
 	{/if}
 	{#if currentPage === 'markup/markup1'}
 		<Markup1 />

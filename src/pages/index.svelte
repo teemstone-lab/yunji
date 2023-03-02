@@ -1,11 +1,12 @@
 <script lang="ts">
-	let count = 0;
-	const clickHandler = () => {
-		count += 1;
-	};
+	import Input from '../components/test/Input.svelte';
+	import Counter from '../components/test/Counter.svelte';
+	import BinarySearchTree from '../components/test/BinarySearchTree.svelte';
 </script>
 
-<p>{count}</p>
-<div>
-	<button on:click="{clickHandler}" class="">button</button>
+<h1 class="sr-only">TEST Area</h1>
+<div class="space-y-12">
+	<Counter />
+	<Input />
+	<BinarySearchTree />
 </div>
