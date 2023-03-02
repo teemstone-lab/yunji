@@ -5,7 +5,7 @@
 </script>
 
 <h1 class="sr-only">TEST Area</h1>
-<div class="space-y-12">
+<div class="space-y-12 py-8">
 	<Counter />
 	<Input />
 	<BinarySearchTree />
