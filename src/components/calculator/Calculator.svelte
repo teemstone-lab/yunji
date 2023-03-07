@@ -2,52 +2,10 @@
 	import { onMount } from 'svelte';
 	import { Calculator } from './calculator';
 
-	// const calculator = [
-	// 	'AC',
-	// 	'+/-',
-	// 	'%',
-	// 	'÷',
-	// 	7,
-	// 	8,
-	// 	9,
-	// 	'×',
-	// 	4,
-	// 	5,
-	// 	6,
-	// 	'-',
-	// 	1,
-	// 	2,
-	// 	3,
-	// 	'+',
-	// 	0,
-	// 	'.',
-	// 	'=',
-	// ];
-
-	// let text = '';
-
-	// function inputText(calc: string | number) {
-	// 	let result = '';
-	// 	text = text + String(calc);
-	// 	console.log(calc === '+');
-
-	// 	if (calc === '=') {
-	// 		if (text.includes('-')) {
-	// 			const testestset = text.slice(0, -1).split('-');
-	// 			result = String(test1.minus(Number(testestset[0]), Number(testestset[1])));
-	// 		}
-	// 		if (text.includes('×')) {
-	// 			const testestset = text.slice(0, -1).split('×');
-	// 			result = String(test1.multi(Number(testestset[0]), Number(testestset[1])));
-	// 		}
-	// 		text = text + result;
-	// 		result = '';
-	// 	} else {
-	// 	}
-	// }
-
 	const calc = new Calculator();
 	let text: string = '';
+
+	// #region CSS style
 	enum ButtonType {
 		Number,
 		Operator,
@@ -61,16 +19,17 @@
 			case ButtonType.Number:
 				return `${defaultStyle} bg-gray-500 bg-opacity-70 hover:bg-gray-300`;
 			case ButtonType.Operator:
-				return `${defaultStyle} bg-orange-400 hover:bg-orange-300`;
+				return `${defaultStyle} bg-orange-400 hover:bg-orange-300 text-3xl`;
 			case ButtonType.Extra:
 				return `${defaultStyle} bg-gray-300 hover:bg-gray-100 text-black`;
 		}
 	};
 	const buttonStyle = 'h-full w-full';
+	const operButtonStyle = buttonStyle + ' mt-[-3px] flex items-center justify-center';
+	// #endregion CSS style
 
+	// #region querySelector
 	onMount(() => {
-		// #region querySelector
-
 		// #region Number
 		const numEl0 = document.querySelector('.number0') as HTMLLIElement;
 
@@ -137,11 +96,18 @@
 			});
 
 		const numEl9 = document.querySelector('.number9') as HTMLLIElement;
-		if (numEl9)
+		if (numEl9) {
 			numEl9.addEventListener('click', () => {
 				calc.inputNumber(9);
 				text = calc.getViewerText();
 			});
+			// numEl9.addEventListener('keyDown', (e: Event) => {
+			// 	if (e.keyCode === '9') {
+			// 		calc.inputNumber(9);
+			// 		text = calc.getViewerText();
+			// 	}
+			// });
+		}
 		// #endregion Number
 
 		// #region operator
@@ -180,40 +146,62 @@
 				text = calc.getViewerText();
 			});
 		// #endregion operator
-		// #endregion querySelector
+
+		// #region extra
+		const extraPercent = document.querySelector('.extraPercent') as HTMLLIElement;
+		if (extraPercent)
+			extraPercent.addEventListener('click', () => {
+				calc.percent();
+				text = calc.getViewerText();
+			});
+
+		const extraAddNegative = document.querySelector('.extraAddNegative') as HTMLLIElement;
+		if (extraAddNegative)
+			extraAddNegative.addEventListener('click', () => {
+				calc.toggleNegative();
+				text = calc.getViewerText();
+			});
+
+		const extraAddDot = document.querySelector('.extraAddDot') as HTMLLIElement;
+		if (extraAddDot)
+			extraAddDot.addEventListener('click', () => {
+				calc.addDot();
+				text = calc.getViewerText();
+			});
+
+		const extraReset = document.querySelector('.extraReset') as HTMLLIElement;
+		if (extraReset)
+			extraReset.addEventListener('click', () => {
+				calc.clear();
+				text = calc.getViewerText();
+			});
+		// #endregion extra
 	});
+	// #endregion querySelector
 </script>
 
 <div class="mx-auto w-[320px] space-y-4 rounded-xl bg-black p-4 text-2xl text-white">
-	<input
-		type="text"
-		name=""
-		id=""
-		disabled
-		class="h-20 w-full rounded-md bg-transparent p-2 text-right text-5xl"
-		value="{text}"
-	/>
+	<p
+		class="flex h-28 w-full items-end justify-end rounded-md bg-transparent p-2 text-right {text.length >
+		10
+			? 'text-2xl'
+			: 'text-5xl'}">{text}</p
+	>
 	<ul
 		class="grid auto-rows-[minmax(66px,auto)] grid-cols-4 items-center justify-center gap-2 font-semibold"
 	>
 		<!-- Line 1 -->
 		<li class="{liStyle(ButtonType.Extra)}"
-			><button
-				class="{buttonStyle}"
-				on:click="{() => {
-					calc.clear();
-					text = calc.getViewerText();
-				}}">{text ? 'C' : 'AC'}</button
-			></li
+			><button class="extraReset {buttonStyle}">{text ? 'C' : 'AC'}</button></li
 		>
 		<li class="{liStyle(ButtonType.Extra)}"
-			><button class="{buttonStyle}" on:click="{() => calc.clear()}">+/-</button></li
+			><button class="extraAddNegative {buttonStyle}">+/-</button></li
 		>
 		<li class="{liStyle(ButtonType.Extra)}"
-			><button class="{buttonStyle}" on:click="{() => calc.percent()}">%</button></li
+			><button class="extraPercent {buttonStyle}">%</button></li
 		>
 		<li class="{liStyle(ButtonType.Operator)}"
-			><button class="operDivide {buttonStyle}">÷</button></li
+			><button class="operDivide {operButtonStyle}"><span>÷</span></button></li
 		>
 
 		<!-- Line 2 -->
@@ -227,7 +215,7 @@
 			><button class="number9 {buttonStyle}">9</button></li
 		>
 		<li class="{liStyle(ButtonType.Operator)}"
-			><button class="operMulti {buttonStyle}">×</button></li
+			><button class="operMulti {operButtonStyle}"><span>×</span></button></li
 		>
 
 		<!-- Line 3 -->
@@ -241,7 +229,7 @@
 			><button class="number6 {buttonStyle}">6</button></li
 		>
 		<li class="{liStyle(ButtonType.Operator)}"
-			><button class="operMinus {buttonStyle}">-</button></li
+			><button class="operMinus {operButtonStyle}"><span>-</span></button></li
 		>
 
 		<!-- Line 4 -->
@@ -255,7 +243,7 @@
 			><button class="number3 {buttonStyle}">3</button></li
 		>
 		<li class="{liStyle(ButtonType.Operator)}"
-			><button class="operAdd {buttonStyle}">+</button></li
+			><button class="operAdd {operButtonStyle}"><span>+</span></button></li
 		>
 
 		<!-- Line 5 -->
@@ -263,20 +251,10 @@
 			><button class="number0 {buttonStyle}">0</button></li
 		>
 		<li class="{liStyle(ButtonType.Number)}"
-			><button class="{buttonStyle}" on:click="{() => calc.inputNumber(0)}">.</button></li
+			><button class="extraAddDot {buttonStyle}">.</button></li
 		>
 		<li class="{liStyle(ButtonType.Operator)}"
-			><button class="result {buttonStyle}">=</button></li
+			><button class="result {operButtonStyle}"><span>=</span></button></li
 		>
-
-		<!-- {#each calculator as calc}
-			<li class="h-full w-full rounded-full {liStyle(calc)} {calc === 0 ? 'col-span-2' : ''}"
-				><button
-					class="h-full w-full"
-					on:click="{() => (calc === 'AC' ? deleteInput() : inputText(calc))}"
-					>{calc}</button
-				></li
-			>
-		{/each} -->
 	</ul>
 </div>
