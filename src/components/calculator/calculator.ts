@@ -80,19 +80,19 @@ export class Calculator {
 		}
 	}
 
-	add(x: number, y: number) {
+	private add(x: number, y: number) {
 		return x + y;
 	}
 
-	minus(x: number, y: number) {
+	private minus(x: number, y: number) {
 		return x - y;
 	}
 
-	multi(x: number, y: number) {
+	private multi(x: number, y: number) {
 		return x * y;
 	}
 
-	divide(x: number, y: number) {
+	private divide(x: number, y: number) {
 		return x / y;
 	}
 
@@ -159,7 +159,7 @@ export class Calculator {
 		}
 	}
 
-	semiClear() {
+	private semiClear() {
 		this.#operator = '';
 		this.#selectedOperator = null;
 		this.#isNegative = false;
