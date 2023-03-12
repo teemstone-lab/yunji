@@ -24,12 +24,60 @@
 				return `${defaultStyle} bg-gray-300 hover:bg-gray-100 text-black`;
 		}
 	};
-	const buttonStyle = 'h-full w-full';
+	const buttonStyle = 'h-full w-full outline-0';
 	const operButtonStyle = buttonStyle + ' mt-[-3px] flex items-center justify-center';
 	// #endregion CSS style
 
 	// #region querySelector
 	onMount(() => {
+		window.addEventListener('keydown', (e) => {
+			const inputKey = e.key;
+			const nembers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+			const findInputNumber = nembers.find((num) => inputKey === String(num));
+
+			if (findInputNumber) {
+				calc.inputNumber(findInputNumber);
+				text = calc.getViewerText();
+			} else {
+				switch (inputKey) {
+					case '0':
+						calc.inputNumber(0);
+						text = calc.getViewerText();
+						break;
+					case '.':
+						calc.addDot();
+						text = calc.getViewerText();
+						break;
+					case '+':
+						calc.selectOperator('add');
+						text = calc.getViewerText();
+						break;
+					case '-':
+						calc.selectOperator('minus');
+						text = calc.getViewerText();
+						break;
+					case '*':
+						calc.selectOperator('multi');
+						text = calc.getViewerText();
+						break;
+					case '/':
+						calc.selectOperator('divide');
+						text = calc.getViewerText();
+						break;
+					case '=':
+						calc.result();
+						text = calc.getViewerText();
+						break;
+					case 'Backspace':
+					case 'Delete':
+						calc.clear();
+						text = calc.getViewerText();
+						break;
+				}
+			}
+		});
+
 		// #region Number
 		const numEl0 = document.querySelector('.number0') as HTMLLIElement;
 
@@ -101,12 +149,6 @@
 				calc.inputNumber(9);
 				text = calc.getViewerText();
 			});
-			// numEl9.addEventListener('keyDown', (e: Event) => {
-			// 	if (e.keyCode === '9') {
-			// 		calc.inputNumber(9);
-			// 		text = calc.getViewerText();
-			// 	}
-			// });
 		}
 		// #endregion Number
 
@@ -192,69 +234,71 @@
 	>
 		<!-- Line 1 -->
 		<li class="{liStyle(ButtonType.Extra)}"
-			><button class="extraReset {buttonStyle}">{text ? 'C' : 'AC'}</button></li
+			><button type="button" class="extraReset {buttonStyle}">{text ? 'C' : 'AC'}</button></li
 		>
 		<li class="{liStyle(ButtonType.Extra)}"
-			><button class="extraAddNegative {buttonStyle}">+/-</button></li
+			><button type="button" class="extraAddNegative {buttonStyle}">+/-</button></li
 		>
 		<li class="{liStyle(ButtonType.Extra)}"
-			><button class="extraPercent {buttonStyle}">%</button></li
+			><button type="button" class="extraPercent {buttonStyle}">%</button></li
 		>
 		<li class="{liStyle(ButtonType.Operator)}"
-			><button class="operDivide {operButtonStyle}"><span>÷</span></button></li
+			><button type="button" class="operDivide {operButtonStyle}"><span>÷</span></button></li
 		>
 
 		<!-- Line 2 -->
 		<li class="{liStyle(ButtonType.Number)}"
-			><button class="number7 {buttonStyle}">7</button></li
+			><button type="button" class="number7 {buttonStyle}">7</button></li
 		>
 		<li class="{liStyle(ButtonType.Number)}"
-			><button class="number8 {buttonStyle}">8</button></li
+			><button type="button" class="number8 {buttonStyle}">8</button></li
 		>
 		<li class="{liStyle(ButtonType.Number)}"
-			><button class="number9 {buttonStyle}">9</button></li
+			><button type="button" class="number9 {buttonStyle}">9</button></li
 		>
 		<li class="{liStyle(ButtonType.Operator)}"
-			><button class="operMulti {operButtonStyle}"><span>×</span></button></li
+			><button type="button" class="operMulti {operButtonStyle}"><span>×</span></button></li
 		>
 
 		<!-- Line 3 -->
 		<li class="{liStyle(ButtonType.Number)}"
-			><button class="number4 {buttonStyle}">4</button></li
+			><button type="button" class="number4 {buttonStyle}">4</button></li
 		>
 		<li class="{liStyle(ButtonType.Number)}"
-			><button class="number5 {buttonStyle}">5</button></li
+			><button type="button" class="number5 {buttonStyle}">5</button></li
 		>
 		<li class="{liStyle(ButtonType.Number)}"
-			><button class="number6 {buttonStyle}">6</button></li
+			><button type="button" class="number6 {buttonStyle}">6</button></li
 		>
 		<li class="{liStyle(ButtonType.Operator)}"
-			><button class="operMinus {operButtonStyle}"><span>-</span></button></li
+			><button type="button" class="operMinus {operButtonStyle}"><span>-</span></button></li
 		>
 
 		<!-- Line 4 -->
 		<li class="{liStyle(ButtonType.Number)}"
-			><button class="number1 {buttonStyle}">1</button></li
+			><button type="button" class="number1 {buttonStyle}">1</button></li
 		>
 		<li class="{liStyle(ButtonType.Number)}"
-			><button class="number2 {buttonStyle}">2</button></li
+			><button type="button" class="number2 {buttonStyle}">2</button></li
 		>
 		<li class="{liStyle(ButtonType.Number)}"
-			><button class="number3 {buttonStyle}">3</button></li
+			><button type="button" class="number3 {buttonStyle}">3</button></li
 		>
 		<li class="{liStyle(ButtonType.Operator)}"
-			><button class="operAdd {operButtonStyle}"><span>+</span></button></li
+			><button type="button" class="operAdd {operButtonStyle}"><span>+</span></button></li
 		>
 
 		<!-- Line 5 -->
 		<li class="{liStyle(ButtonType.Number)} col-span-2"
-			><button class="number0 {buttonStyle}">0</button></li
+			><button type="button" class="number0 {buttonStyle} grid grid-cols-2 items-center"
+				>0</button
+			></li
 		>
 		<li class="{liStyle(ButtonType.Number)}"
-			><button class="extraAddDot {buttonStyle}">.</button></li
+			><button type="button" class="extraAddDot {buttonStyle}">.</button></li
 		>
 		<li class="{liStyle(ButtonType.Operator)}"
-			><button class="result {operButtonStyle}"><span>=</span></button></li
+			><button type="button" class="result {operButtonStyle}"><span>=</span></button></li
 		>
 	</ul>
 </div>

@@ -21,26 +21,22 @@ export class Calculator {
 	}
 
 	inputNumber(number: number) {
-		const isStartZero = (index: number) => {
-			return this.#viewerText[index] === '0';
-		};
-		const isStaredtLeftZero = !this.#selectedOperator && isStartZero(0) && number === 0;
-
-		const zeroIndex = this.#selectedOperator
-			? this.#viewerText.length - 1
-			: Number(this.#isNegative);
-
 		const viewerLeftText = this.#viewerText;
 		const viewerRightText = this.#viewerText.split(this.#operator)[1];
 		const enteredText = this.#selectedOperator ? viewerRightText : viewerLeftText;
 
+		const isStartZero = () => {
+			const index = this.#isNegative ? 1 : 0;
+			return enteredText[index] === '0';
+		};
+
 		const isLimitedLength = enteredText.length > 8;
 
-		if (isStaredtLeftZero || isLimitedLength) {
+		if (isLimitedLength) {
 			if (isLimitedLength) alert('Number Limit!');
 		} else {
 			// -0 혹은 0 으로 시작 시, 예외 케이스
-			if (!this.#hasDot && isStartZero(zeroIndex)) {
+			if (!this.#hasDot && isStartZero()) {
 				this.#viewerText = this.#viewerText.slice(0, -1);
 			}
 
@@ -133,10 +129,11 @@ export class Calculator {
 
 		const enteredText = this.#selectedOperator ? rightText : leftText;
 
-		const isAddDotCase = enteredText.length > 0 && checkHasDot;
+		const isStartZero = enteredText.length > 0;
 
-		if (isAddDotCase) {
-			this.#viewerText = this.#viewerText + '.';
+		if (checkHasDot) {
+			const dot = isStartZero ? '.' : '0.';
+			this.#viewerText = this.#viewerText + dot;
 			this.#hasDot = true;
 		}
 	}
