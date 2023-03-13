@@ -94,6 +94,7 @@ export class Calculator {
 
 	percent() {
 		const result = Number(this.#viewerText) / 100;
+		this.#currentValue = result;
 		this.#viewerText = String(result);
 	}
 
@@ -129,10 +130,10 @@ export class Calculator {
 
 		const enteredText = this.#selectedOperator ? rightText : leftText;
 
-		const isStartZero = enteredText.length > 0;
+		const hasStartNum = enteredText.length > 0;
 
 		if (checkHasDot) {
-			const dot = isStartZero ? '.' : '0.';
+			const dot = hasStartNum ? '.' : '0.';
 			this.#viewerText = this.#viewerText + dot;
 			this.#hasDot = true;
 		}
