@@ -1,5 +1,8 @@
-<script>
-	export let clickHandler;
+<script lang="ts">
+	type ClickEvent = MouseEvent & {
+		currentTarget: EventTarget & HTMLButtonElement;
+	};
+	export let clickHandler: (e: ClickEvent) => void;
 
 	const liStyle = 'w-full bg-gray-100 hover:bg-gray-200 transition-all';
 	const buttonStyle = 'p-[10px] font-semibold transition-all';
@@ -11,6 +14,12 @@
 		on:click="{clickHandler}">index</button
 	>
 	<ul class="flex w-full justify-around gap-[2px]">
+		<li class="{liStyle}">
+			<button class="w-full {buttonStyle}" on:click="{clickHandler}">webWorker</button>
+		</li>
+		<li class="{liStyle}">
+			<button class="w-full {buttonStyle}" on:click="{clickHandler}">noWorker</button>
+		</li>
 		{#each [1, 2, 3] as item (item)}
 			<li class="{liStyle}">
 				<button class="w-full {buttonStyle}" on:click="{clickHandler}"

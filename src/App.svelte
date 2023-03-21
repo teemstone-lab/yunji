@@ -4,6 +4,8 @@
 	import Markup1 from './pages/markup/html1.svelte';
 	import Markup2 from './pages/markup/html2.svelte';
 	import Markup3 from './pages/markup/html3.svelte';
+	import WebWorker from './pages/webWorker.svelte';
+	import NoWorker from './pages/noWorker.svelte';
 	import Nav from './components/nav/Nav.svelte';
 
 	type ClickEvent = MouseEvent & {
@@ -22,6 +24,12 @@
 		<div class="px-4">
 			<Index />
 		</div>
+	{/if}
+	{#if currentPage === 'webWorker'}
+		<WebWorker />
+	{/if}
+	{#if currentPage === 'noWorker'}
+		<NoWorker />
 	{/if}
 	{#if currentPage === 'markup/markup1'}
 		<Markup1 />
