@@ -5,7 +5,7 @@
 	import Markup2 from './pages/markup/html2.svelte';
 	import Markup3 from './pages/markup/html3.svelte';
 	import WebWorker from './pages/webWorker.svelte';
-	import NoWorker from './pages/noWorker.svelte';
+	import OnTuneViewer from './pages/onTuneViewer.svelte';
 	import Nav from './components/nav/Nav.svelte';
 
 	type ClickEvent = MouseEvent & {
@@ -25,11 +25,11 @@
 			<Index />
 		</div>
 	{/if}
+	{#if currentPage === 'onTuneViewer'}
+		<OnTuneViewer />
+	{/if}
 	{#if currentPage === 'webWorker'}
 		<WebWorker />
-	{/if}
-	{#if currentPage === 'noWorker'}
-		<NoWorker />
 	{/if}
 	{#if currentPage === 'markup/markup1'}
 		<Markup1 />
