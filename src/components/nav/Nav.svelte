@@ -15,7 +15,7 @@
 	>
 	<ul class="flex w-full justify-around gap-[2px]">
 		<li class="{liStyle}">
-			<button class="w-full {buttonStyle}" on:click="{clickHandler}">ontuneViewer</button>
+			<button class="w-full {buttonStyle}" on:click="{clickHandler}">onTuneViewer</button>
 		</li>
 		<li class="{liStyle}">
 			<button class="w-full {buttonStyle}" on:click="{clickHandler}">webWorker</button>
