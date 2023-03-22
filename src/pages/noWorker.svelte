@@ -428,8 +428,9 @@
 		// animation = 'animate-spin';
 		animation = 'animate-move';
 		timerId = setInterval(() => {
-			list = mockHosts(100);
+			list = mockHosts(7000);
 			console.log(list);
+			console.log(Date.now());
 		}, 3000);
 	};
 
@@ -446,6 +447,7 @@
 			class="rounded-md bg-blue-600 p-2 px-4 font-medium text-white hover:bg-blue-800"
 			on:click="{() => {
 				sendToWorker();
+				console.log(Date.now());
 			}}">Start</button
 		>
 		<button
@@ -456,12 +458,12 @@
 			}}">Stop</button
 		>
 	</div>
-	<div class="flex">
+	<div class="flex space-x-4">
 		<ul class="grid w-1/2 grid-cols-5">
 			{#each Array(4000) as _, idx}
-				<li class="{animation}"
+				<li
 					><span
-						class="inline-flex h-16 w-16 items-center justify-center rounded-full bg-gray-200 text-center text-xs"
+						class="{animation} absolute inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-200 text-center text-xs"
 						>{idx}</span
 					></li
 				>
