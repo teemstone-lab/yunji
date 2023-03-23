@@ -146,6 +146,19 @@
 				break;
 		}
 	};
+
+	const buttonTitle = (item: number) => {
+		switch (item) {
+			case 0:
+				return 'View All Hosts';
+			case 1:
+				return 'View Active Hosts';
+			case 2:
+				return 'View Disabled Hosts';
+			default:
+				break;
+		}
+	};
 </script>
 
 <div class="sideTab">
@@ -165,7 +178,10 @@
 					<ul>
 						{#each btnBundleItem as item}
 							<li class="treeCon">
-								<button class="tree{item}" on:click="{() => showList(item)}"
+								<button
+									title="{buttonTitle(item)}"
+									class="tree{item}"
+									on:click="{() => showList(item)}"
 									>{item === 0 ? 'ALL' : ''}</button
 								>
 							</li>

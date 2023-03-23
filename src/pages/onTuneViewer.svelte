@@ -25,9 +25,9 @@
 	import SideNav from '../components/onTuneViewer/SideNav.svelte';
 	import { mockHostsCreator } from '../mockHostsCreator';
 
-	let list = mockHostsCreator(100, true);
+	let list: MockHostType[] = mockHostsCreator(100, true);
 	let filteredList = {
-		on: list as MockHostType[],
+		on: list,
 		off: [] as MockHostType[],
 	};
 
@@ -54,7 +54,7 @@
 		timerId = setInterval(() => {
 			// 3초 경과마다 웹 워커로 메시지 보내기
 			// 웹 워커는 메세지를 받고 작업 수행 결과를 보내줌
-			worker.postMessage('');
+			worker.postMessage(list);
 		}, 3000);
 	};
 
@@ -120,6 +120,7 @@
 		bind:isGMT="{isGMT}"
 		nowDateTime="{nowDateTime}"
 		bind:showListType="{showListType}"
+		list="{list}"
 		filteredList="{filteredList}"
 	/>
 	<!--  -->

@@ -184,7 +184,11 @@
 		</ul>
 	</div>
 	<!--  -->
-	<div class="topTimetable">
+	<div class="topTimetable group relative">
+		<small
+			class="absolute top-8 hidden rounded bg-slate-200 bg-opacity-70 px-1 text-xs font-normal text-black group-hover:block"
+			>{isGMT ? '❗클릭 시 로컬 타임으로 전환' : '❗클릭 시 UTC로 전환'}</small
+		>
 		<button
 			class="topRealtime"
 			on:click="{() => {

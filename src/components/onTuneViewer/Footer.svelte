@@ -16,6 +16,7 @@
 		font-size: 10px;
 	}
 
+	.allItems,
 	.connectOn,
 	.connectOff,
 	.bottomRealtime {
@@ -26,11 +27,18 @@
 	}
 	/* padding-left: 2px; */
 
+	.allItems span,
 	.connectOn span,
 	.connectOff span,
 	.bottomRealtime span {
 		display: flex;
 		padding-right: 20px;
+	}
+
+	.bottomAll {
+		width: 14px;
+		height: 14px;
+		font-weight: 600;
 	}
 
 	.bottomIcon1 {
@@ -62,6 +70,7 @@
 	export let nowDateTime: string;
 
 	export let showListType: ShowViewerListType;
+	export let list: MockHostType[];
 	export let filteredList: {
 		on: MockHostType[];
 		off: MockHostType[];
@@ -74,13 +83,35 @@
 	<div class="hostCount">
 		<p>0 host(s) Selected</p>
 	</div>
-	<button type="button" class="connectOn" on:click="{() => (showListType = 'on')}">
+	<button
+		title="View All Hosts"
+		type="button"
+		class="allItems"
+		on:click="{() => (showListType = 'all')}"
+	>
+		<p><span class="bottomAll">ALL</span>{list.length}</p>
+	</button>
+	<button
+		title="View Active Hosts"
+		type="button"
+		class="connectOn"
+		on:click="{() => (showListType = 'on')}"
+	>
 		<p><span class="bottomIcon1"></span>{filteredList.on.length}</p>
 	</button>
-	<button type="button" class="connectOff" on:click="{() => (showListType = 'off')}">
+	<button
+		title="View Disabled Hosts"
+		type="button"
+		class="connectOff"
+		on:click="{() => (showListType = 'off')}"
+	>
 		<p><span class="bottomIcon2"></span>{filteredList.off ? filteredList.off.length : '-'}</p>
 	</button>
-	<div class="bottomRealtime">
+	<div class="bottomRealtime group relative">
+		<small
+			class="absolute bottom-5 hidden rounded bg-slate-200 bg-opacity-70 px-1 text-xs group-hover:block"
+			>{isGMT ? '❗클릭 시 로컬 타임으로 전환' : '❗클릭 시 UTC로 전환'}</small
+		>
 		<button
 			type="button"
 			on:click="{() => {
