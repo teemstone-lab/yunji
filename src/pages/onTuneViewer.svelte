@@ -23,9 +23,8 @@
 	import Header from '../components/onTuneViewer/Header.svelte';
 	import Footer from '../components/onTuneViewer/Footer.svelte';
 	import SideNav from '../components/onTuneViewer/SideNav.svelte';
-	import { mockHostsCreator } from '../mockHostsCreator';
 
-	let list: MockHostType[] = mockHostsCreator(100, true);
+	let list: MockHostType[] = [];
 	let filteredList = {
 		on: list,
 		off: [] as MockHostType[],
@@ -49,6 +48,11 @@
 		filteredList.off = list.filter((item) => !item.isOn);
 		console.log('받았어용:', event.data);
 	};
+
+	// setTimeout(() => {
+	// 	worker.postMessage({ limit: 100, isAllTrue: true });
+	// }, 0);
+	worker.postMessage({ limit: 100, isAllTrue: true });
 
 	const sendToWorker = () => {
 		timerId = setInterval(() => {
