@@ -192,17 +192,13 @@
 			height: 28px;
 		}
 		.topClock {
-			display: flex;
-			border: 1px solid black;
 			width: 28px;
 			height: 28px;
 		}
 
 		.top-right0 {
-			background: url(/top-right0.png) no-repeat;
 			width: 28px;
 			height: 28px;
-			background-size: contain;
 		}
 	}
 
@@ -231,11 +227,14 @@
 			display: none;
 		}
 
+		.topClock {
+			width: 36px;
+			height: 36px;
+		}
+
 		.top-right0 {
-			background: url(/top-right0.png) no-repeat;
-			width: 28px;
-			height: 28px;
-			background-size: contain;
+			width: 36px;
+			height: 36px;
 		}
 	}
 </style>
@@ -266,7 +265,7 @@
 	<!--  -->
 	<div class="topTimetable group relative">
 		<small
-			class="absolute top-8 hidden rounded bg-slate-200 bg-opacity-70 px-1 text-xs font-normal text-black group-hover:block"
+			class="absolute top-8 hidden rounded bg-slate-200 bg-opacity-70 px-1 text-xs font-normal text-black group-hover:md:block"
 			>{isGMT ? '❗클릭 시 로컬 타임으로 전환' : '❗클릭 시 UTC로 전환'}</small
 		>
 		<button

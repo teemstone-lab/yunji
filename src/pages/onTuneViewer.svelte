@@ -64,7 +64,7 @@
 
 	const stopToSendWorker = () => {
 		clearInterval(timerId);
-		worker.terminate();
+		worker.postMessage({ limit: 100, isAllTrue: true });
 	};
 	// #endregion Web Worker
 
@@ -106,7 +106,7 @@
 					class="rounded-md bg-blue-600 p-2 px-4 font-medium text-white hover:bg-blue-800"
 					on:click="{() => {
 						sendToWorker();
-						console.log(Date.now());
+						console.log('시작😎👍');
 					}}">Start</button
 				>
 				<button

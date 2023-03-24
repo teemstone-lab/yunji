@@ -122,6 +122,11 @@
 			height: 38px;
 		}
 	}
+	@media (max-width: 768px) {
+		.btnBundle2 {
+			padding: 0;
+		}
+	}
 </style>
 
 <script lang="ts">
