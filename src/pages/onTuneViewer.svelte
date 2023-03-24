@@ -19,10 +19,8 @@
 </style>
 
 <script lang="ts">
+	import { Header, SideNav, Footer } from '../components/onTuneViewer';
 	import type { DateTimeFormatOptions, MockHostType, ShowViewerListType } from 'src/store';
-	import Header from '../components/onTuneViewer/Header.svelte';
-	import Footer from '../components/onTuneViewer/Footer.svelte';
-	import SideNav from '../components/onTuneViewer/SideNav.svelte';
 
 	let list: MockHostType[] = [];
 	let filteredList = {
@@ -36,10 +34,15 @@
 	let showListType: ShowViewerListType = 'all';
 	let isGMT: boolean = false;
 
+	let isActive: boolean = false;
+
 	// #region Web Worker
 
 	// 웹 워커 생성
 	const worker = new Worker(new URL('../worker.ts', import.meta.url));
+	const newHostsCreate = () => worker.postMessage({ limit: 100, isAllTrue: true });
+
+	newHostsCreate();
 
 	// 웹 워커에서 메시지 받기
 	worker.onmessage = (event) => {
@@ -49,12 +52,8 @@
 		console.log('받았어용:', event.data);
 	};
 
-	// setTimeout(() => {
-	// 	worker.postMessage({ limit: 100, isAllTrue: true });
-	// }, 0);
-	worker.postMessage({ limit: 100, isAllTrue: true });
-
 	const sendToWorker = () => {
+		console.log('3초 뒤 시작😎👍');
 		timerId = setInterval(() => {
 			// 3초 경과마다 웹 워커로 메시지 보내기
 			// 웹 워커는 메세지를 받고 작업 수행 결과를 보내줌
@@ -64,10 +63,12 @@
 
 	const stopToSendWorker = () => {
 		clearInterval(timerId);
-		worker.postMessage({ limit: 100, isAllTrue: true });
+		isActive = false;
+		newHostsCreate();
 	};
 	// #endregion Web Worker
 
+	// #region Date-Time
 	const dateTime = () => {
 		const options: DateTimeFormatOptions = {
 			year: 'numeric',
@@ -85,6 +86,7 @@
 		nowDateTime = now;
 	};
 	setInterval(() => dateTime(), 1000);
+	// #endregion Date-Time
 </script>
 
 <!-- 4주차 실습하신 것을 가져와 컴포넌트 분리, 기능 추가 등의 과정을 거침 -->
@@ -100,13 +102,15 @@
 		/>
 
 		<div class="chartTab"
-			><div class="flex w-full items-center justify-center space-x-1">
+			><div class="flex w-full flex-col items-center justify-center gap-2 md:flex-row">
 				<button
 					type="button"
 					class="rounded-md bg-blue-600 p-2 px-4 font-medium text-white hover:bg-blue-800"
 					on:click="{() => {
-						sendToWorker();
-						console.log('시작😎👍');
+						if (isActive === false) {
+							isActive = true;
+							sendToWorker();
+						}
 					}}">Start</button
 				>
 				<button

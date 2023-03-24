@@ -210,12 +210,14 @@
 				<li
 					><button
 						type="button"
-						class="flex w-full items-center px-1 transition-all duration-300 hover:bg-gray-700 {item.isOn
+						class="flex w-full items-center px-1 hover:bg-gray-700 {item.isOn
 							? 'font-semibold opacity-100'
 							: 'font-medium opacity-50'}"
 					>
 						<span
-							class="{`mr-2 h-3 w-3 bg-contain bg-no-repeat transition-all duration-300 ${
+							class="{`mr-2 h-3 w-3 bg-contain bg-no-repeat ${
+								showListType === 'all' ? 'transition-all duration-300' : ''
+							} ${
 								item.isOn ? "bg-[url('/bottom1.png')]" : "bg-[url('/bottom2.png')]"
 							}`}"></span>{item.name}</button
 					></li
