@@ -2,7 +2,8 @@
 	.sideTab {
 		display: flex;
 		flex-direction: column;
-		width: 500px;
+		width: 40%;
+		max-width: 400px;
 	}
 
 	.hostTab {
@@ -13,6 +14,7 @@
 
 	.hostTab ul {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 	}
 
@@ -114,6 +116,12 @@
 		border-radius: 14px;
 		border: 2px solid #5e5e5e;
 	}
+
+	@media (max-width: 1024px) {
+		.hostTab {
+			height: 38px;
+		}
+	}
 </style>
 
 <script lang="ts">
@@ -197,12 +205,12 @@
 				<li
 					><button
 						type="button"
-						class="flex w-full items-center px-1 transition-all duration-500 hover:bg-gray-700 {item.isOn
+						class="flex w-full items-center px-1 transition-all duration-300 hover:bg-gray-700 {item.isOn
 							? 'font-semibold opacity-100'
 							: 'font-medium opacity-50'}"
 					>
 						<span
-							class="{`mr-2 h-3 w-3 bg-contain bg-no-repeat transition-all duration-500 ${
+							class="{`mr-2 h-3 w-3 bg-contain bg-no-repeat transition-all duration-300 ${
 								item.isOn ? "bg-[url('/bottom1.png')]" : "bg-[url('/bottom2.png')]"
 							}`}"></span>{item.name}</button
 					></li

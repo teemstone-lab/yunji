@@ -8,24 +8,24 @@
 	const buttonStyle = 'p-[10px] font-semibold transition-all';
 </script>
 
-<div class="flex items-center justify-between">
-	<button
-		class="w-20 bg-gray-500 text-white hover:bg-gray-700 {buttonStyle}"
-		on:click="{clickHandler}">index</button
+<ul class="flex w-full items-center justify-between gap-[2px] overflow-x-auto text-sm md:text-base">
+	<li class="{liStyle} !w-20">
+		<button
+			class="bg-gray-500 text-white hover:bg-gray-700 {buttonStyle}"
+			on:click="{clickHandler}">index</button
+		></li
 	>
-	<ul class="flex w-full justify-around gap-[2px]">
+	<li class="{liStyle}">
+		<button class="w-full {buttonStyle}" on:click="{clickHandler}">onTuneViewer</button>
+	</li>
+	<li class="{liStyle}">
+		<button class="w-full {buttonStyle}" on:click="{clickHandler}">webWorker</button>
+	</li>
+	{#each [1, 2, 3] as item (item)}
 		<li class="{liStyle}">
-			<button class="w-full {buttonStyle}" on:click="{clickHandler}">onTuneViewer</button>
+			<button class="w-full {buttonStyle}" on:click="{clickHandler}"
+				>markup/markup{item}</button
+			>
 		</li>
-		<li class="{liStyle}">
-			<button class="w-full {buttonStyle}" on:click="{clickHandler}">webWorker</button>
-		</li>
-		{#each [1, 2, 3] as item (item)}
-			<li class="{liStyle}">
-				<button class="w-full {buttonStyle}" on:click="{clickHandler}"
-					>markup/markup{item}</button
-				>
-			</li>
-		{/each}
-	</ul>
-</div>
+	{/each}
+</ul>

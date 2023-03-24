@@ -158,6 +158,86 @@
 		height: 36px;
 		background-size: contain;
 	}
+
+	@media (max-width: 1024px) {
+		.head {
+			height: 29px;
+		}
+		.btnBundle .icon8-2 {
+			/* border: 1px solid black; */
+			width: 11px;
+			height: 28px;
+		}
+		.icon {
+			width: 28px;
+			height: 28px;
+		}
+		.icon1,
+		.icon2,
+		.icon3,
+		.icon4,
+		.icon5,
+		.icon6,
+		.icon7,
+		.icon8,
+		.icon9,
+		.icon10,
+		.icon11,
+		.icon12 {
+			width: 28px;
+			height: 28px;
+		}
+		.icon8-2 {
+			width: 13px;
+			height: 28px;
+		}
+		.topClock {
+			display: flex;
+			border: 1px solid black;
+			width: 28px;
+			height: 28px;
+		}
+
+		.top-right0 {
+			background: url(/top-right0.png) no-repeat;
+			width: 28px;
+			height: 28px;
+			background-size: contain;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.head {
+			flex-wrap: wrap;
+			height: 59px;
+			overflow: hidden;
+		}
+		.topButton {
+			width: 80%;
+		}
+		.topButton ul {
+			flex-wrap: wrap;
+			justify-content: flex-start;
+		}
+		.btnBundle {
+			padding: 0;
+		}
+		.topTimetable {
+			width: 20%;
+			padding-right: 16px;
+			justify-content: space-between;
+		}
+		.topRealtime > p {
+			display: none;
+		}
+
+		.top-right0 {
+			background: url(/top-right0.png) no-repeat;
+			width: 28px;
+			height: 28px;
+			background-size: contain;
+		}
+	}
 </style>
 
 <script lang="ts">

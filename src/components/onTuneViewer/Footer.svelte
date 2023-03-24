@@ -61,6 +61,12 @@
 		height: 14px;
 		background-size: contain;
 	}
+
+	@media (max-width: 768px) {
+		.bottomRealtime {
+			display: none;
+		}
+	}
 </style>
 
 <script lang="ts">
