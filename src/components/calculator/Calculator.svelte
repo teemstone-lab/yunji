@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import Layout from '../common/Layout.svelte';
 	import { Calculator } from './calculator';
 
 	const calc = new Calculator();
@@ -222,83 +223,89 @@
 	// #endregion querySelector
 </script>
 
-<div class="mx-auto w-[320px] space-y-4 rounded-xl bg-black p-4 text-2xl text-white">
-	<p
-		class="flex h-28 w-full items-end justify-end rounded-md bg-transparent p-2 text-right {text.length >
-		10
-			? 'text-2xl'
-			: 'text-5xl'}">{text}</p
-	>
-	<ul
-		class="grid auto-rows-[minmax(66px,auto)] grid-cols-4 items-center justify-center gap-2 font-semibold"
-	>
-		<!-- Line 1 -->
-		<li class="{liStyle(ButtonType.Extra)}"
-			><button type="button" class="extraReset {buttonStyle}">{text ? 'C' : 'AC'}</button></li
+<Layout title="Calculator">
+	<div class="mx-auto w-[320px] space-y-4 rounded-xl bg-black p-4 text-2xl text-white">
+		<p
+			class="flex h-28 w-full items-end justify-end rounded-md bg-transparent p-2 text-right {text.length >
+			10
+				? 'text-2xl'
+				: 'text-5xl'}">{text}</p
 		>
-		<li class="{liStyle(ButtonType.Extra)}"
-			><button type="button" class="extraAddNegative {buttonStyle}">+/-</button></li
+		<ul
+			class="grid auto-rows-[minmax(66px,auto)] grid-cols-4 items-center justify-center gap-2 font-semibold"
 		>
-		<li class="{liStyle(ButtonType.Extra)}"
-			><button type="button" class="extraPercent {buttonStyle}">%</button></li
-		>
-		<li class="{liStyle(ButtonType.Operator)}"
-			><button type="button" class="operDivide {operButtonStyle}"><span>÷</span></button></li
-		>
+			<!-- Line 1 -->
+			<li class="{liStyle(ButtonType.Extra)}"
+				><button type="button" class="extraReset {buttonStyle}">{text ? 'C' : 'AC'}</button
+				></li
+			>
+			<li class="{liStyle(ButtonType.Extra)}"
+				><button type="button" class="extraAddNegative {buttonStyle}">+/-</button></li
+			>
+			<li class="{liStyle(ButtonType.Extra)}"
+				><button type="button" class="extraPercent {buttonStyle}">%</button></li
+			>
+			<li class="{liStyle(ButtonType.Operator)}"
+				><button type="button" class="operDivide {operButtonStyle}"><span>÷</span></button
+				></li
+			>
 
-		<!-- Line 2 -->
-		<li class="{liStyle(ButtonType.Number)}"
-			><button type="button" class="number7 {buttonStyle}">7</button></li
-		>
-		<li class="{liStyle(ButtonType.Number)}"
-			><button type="button" class="number8 {buttonStyle}">8</button></li
-		>
-		<li class="{liStyle(ButtonType.Number)}"
-			><button type="button" class="number9 {buttonStyle}">9</button></li
-		>
-		<li class="{liStyle(ButtonType.Operator)}"
-			><button type="button" class="operMulti {operButtonStyle}"><span>×</span></button></li
-		>
+			<!-- Line 2 -->
+			<li class="{liStyle(ButtonType.Number)}"
+				><button type="button" class="number7 {buttonStyle}">7</button></li
+			>
+			<li class="{liStyle(ButtonType.Number)}"
+				><button type="button" class="number8 {buttonStyle}">8</button></li
+			>
+			<li class="{liStyle(ButtonType.Number)}"
+				><button type="button" class="number9 {buttonStyle}">9</button></li
+			>
+			<li class="{liStyle(ButtonType.Operator)}"
+				><button type="button" class="operMulti {operButtonStyle}"><span>×</span></button
+				></li
+			>
 
-		<!-- Line 3 -->
-		<li class="{liStyle(ButtonType.Number)}"
-			><button type="button" class="number4 {buttonStyle}">4</button></li
-		>
-		<li class="{liStyle(ButtonType.Number)}"
-			><button type="button" class="number5 {buttonStyle}">5</button></li
-		>
-		<li class="{liStyle(ButtonType.Number)}"
-			><button type="button" class="number6 {buttonStyle}">6</button></li
-		>
-		<li class="{liStyle(ButtonType.Operator)}"
-			><button type="button" class="operMinus {operButtonStyle}"><span>-</span></button></li
-		>
+			<!-- Line 3 -->
+			<li class="{liStyle(ButtonType.Number)}"
+				><button type="button" class="number4 {buttonStyle}">4</button></li
+			>
+			<li class="{liStyle(ButtonType.Number)}"
+				><button type="button" class="number5 {buttonStyle}">5</button></li
+			>
+			<li class="{liStyle(ButtonType.Number)}"
+				><button type="button" class="number6 {buttonStyle}">6</button></li
+			>
+			<li class="{liStyle(ButtonType.Operator)}"
+				><button type="button" class="operMinus {operButtonStyle}"><span>-</span></button
+				></li
+			>
 
-		<!-- Line 4 -->
-		<li class="{liStyle(ButtonType.Number)}"
-			><button type="button" class="number1 {buttonStyle}">1</button></li
-		>
-		<li class="{liStyle(ButtonType.Number)}"
-			><button type="button" class="number2 {buttonStyle}">2</button></li
-		>
-		<li class="{liStyle(ButtonType.Number)}"
-			><button type="button" class="number3 {buttonStyle}">3</button></li
-		>
-		<li class="{liStyle(ButtonType.Operator)}"
-			><button type="button" class="operAdd {operButtonStyle}"><span>+</span></button></li
-		>
+			<!-- Line 4 -->
+			<li class="{liStyle(ButtonType.Number)}"
+				><button type="button" class="number1 {buttonStyle}">1</button></li
+			>
+			<li class="{liStyle(ButtonType.Number)}"
+				><button type="button" class="number2 {buttonStyle}">2</button></li
+			>
+			<li class="{liStyle(ButtonType.Number)}"
+				><button type="button" class="number3 {buttonStyle}">3</button></li
+			>
+			<li class="{liStyle(ButtonType.Operator)}"
+				><button type="button" class="operAdd {operButtonStyle}"><span>+</span></button></li
+			>
 
-		<!-- Line 5 -->
-		<li class="{liStyle(ButtonType.Number)} col-span-2"
-			><button type="button" class="number0 {buttonStyle} grid grid-cols-2 items-center"
-				>0</button
-			></li
-		>
-		<li class="{liStyle(ButtonType.Number)}"
-			><button type="button" class="extraAddDot {buttonStyle}">.</button></li
-		>
-		<li class="{liStyle(ButtonType.Operator)}"
-			><button type="button" class="result {operButtonStyle}"><span>=</span></button></li
-		>
-	</ul>
-</div>
+			<!-- Line 5 -->
+			<li class="{liStyle(ButtonType.Number)} col-span-2"
+				><button type="button" class="number0 {buttonStyle} grid grid-cols-2 items-center"
+					>0</button
+				></li
+			>
+			<li class="{liStyle(ButtonType.Number)}"
+				><button type="button" class="extraAddDot {buttonStyle}">.</button></li
+			>
+			<li class="{liStyle(ButtonType.Operator)}"
+				><button type="button" class="result {operButtonStyle}"><span>=</span></button></li
+			>
+		</ul>
+	</div>
+</Layout>

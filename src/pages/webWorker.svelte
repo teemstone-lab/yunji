@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { EventData } from 'src/store';
-	import Layout from '../components/test/Layout.svelte';
+	import Layout from '../components/common/Layout.svelte';
 
 	let worker1: Worker;
 	let worker2: Worker;

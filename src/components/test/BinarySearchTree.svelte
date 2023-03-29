@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Layout from './Layout.svelte';
+	import Layout from '../common/Layout.svelte';
 
 	const binarySearchTree = ['전위순회', '중위순회', '후위순회'];
 	let selectedButton: string;

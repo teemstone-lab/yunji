@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Layout from './Layout.svelte';
+	import Layout from '../common/Layout.svelte';
 
 	let count = 0;
 	const clickHandler = (add?: boolean) => {

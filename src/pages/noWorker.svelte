@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Layout from '../components/test/Layout.svelte';
+	import Layout from '../components/common/Layout.svelte';
 
 	let list: {
 		name: number;
