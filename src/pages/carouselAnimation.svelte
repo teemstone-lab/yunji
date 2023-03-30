@@ -96,57 +96,12 @@
 	.carousel__cell:nth-child(9) {
 		transform: rotateY(320deg) translateZ(120vw);
 	}
-
-	.carousel-options {
-		text-align: center;
-		position: relative;
-		z-index: 2;
-		background: hsla(0, 0%, 100%, 0.8);
-	}
-	.nextPrevBtn {
-		position: absolute;
-		bottom: 0;
-		width: 100%;
-		display: flex;
-		justify-content: center;
-		gap: 400px;
-	}
-	.next,
-	.prev {
-		color: #000;
-		padding: 1em 2em;
-		cursor: pointer;
-		background: #fbfbfb;
-		border-radius: 5px;
-		opacity: 0.4;
-		border: 1px solid #7f7f7f;
-		transition: opacity 0.1s, top 0.1s;
-	}
-	.next:hover,
-	.prev:hover {
-		opacity: 0.8;
-	}
-	.next:active,
-	.prev:active {
-		top: 104px;
-		box-shadow: 0 1px 0 #999;
-	}
-	.next {
-		right: 5em;
-	}
-	.prev {
-		left: 5em;
-	}
 </style>
 
 <script lang="ts">
 	import { Carousel, CellViewType } from '../components/carousel/carousel';
 	import { onMount } from 'svelte';
-
-	enum PrevNext {
-		prev = 'prev',
-		next = 'next',
-	}
+	import Options from '../components/carousel/Options.svelte';
 
 	const random = (min: number, max: number) => {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -158,15 +113,12 @@
 
 	let carouselEl: HTMLElement;
 	let cells: NodeListOf<Element>;
-	let cellsRange: HTMLInputElement;
-	let orientationRadios: NodeListOf<Element>;
 
 	const rotateCarousel = () => {
 		carousel.rotateCarousel();
 
 		if (carouselEl) {
 			const checkCurrentIndex = carousel.selectedIndex > carousel.cellCount;
-
 			if (checkCurrentIndex) {
 				carouselEl.style.transition = 'none';
 
@@ -179,7 +131,7 @@
 	};
 
 	const changeCarousel = () => {
-		carousel.cellCount = Number(cellsRange.value);
+		carousel.cellCount = count;
 
 		for (let i = 0; i < cells.length; i++) {
 			let cell = cells[i] as HTMLElement;
@@ -197,6 +149,7 @@
 				cell.style.transform = 'none';
 			}
 		}
+
 		rotateCarousel();
 	};
 
@@ -208,48 +161,36 @@
 		carouselAnimation();
 	};
 
-	const changeCount = (min: number, max: number) => {
-		const newCount = random(min, max);
-		cellsRange.value = String(newCount);
-		carousel.cellCount = newCount;
+	const onOrientationChange = (radioValue: CellViewType) => {
+		carousel.toggleHorizontal(radioValue);
 		changeCarousel();
 	};
 
 	onMount(() => {
 		carouselEl = document.querySelector('.carousel') as HTMLElement;
 		cells = carouselEl && carouselEl.querySelectorAll('.carousel__cell');
-		cellsRange = document.querySelector('.cells-range') as HTMLInputElement;
-		orientationRadios = document.querySelectorAll('input[name="orientation"]');
-
-		cellsRange.addEventListener('change', changeCarousel);
-		cellsRange.addEventListener('input', changeCarousel);
-
-		const onOrientationChange = () => {
-			let checkedRadio = document.querySelector(
-				'input[name="orientation"]:checked',
-			) as HTMLInputElement;
-			carousel.toggleHorizontal(checkedRadio.value as CellViewType);
-			changeCarousel();
-		};
-
-		(function () {
-			for (let i = 0; i < orientationRadios.length; i++) {
-				let radio = orientationRadios[i];
-				radio.addEventListener('change', onOrientationChange);
-			}
-		})();
 
 		onOrientationChange();
 	});
 
 	setTimeout(() => {
 		// 최초 실행시, 사용자가 3초라는 긴 시간을 기다리지 않도록 하기 위함
+		carousel.setRotateFunction(rotateCarousel);
 		animationStart();
 	}, 1000);
 
 	const cellItems = Array(20)
 		.fill(0)
 		.map((_, i) => i + 1);
+
+	const props = {
+		rotateCarousel,
+		changeCarousel,
+		onOrientationChange,
+		carouselAnimation,
+		animationStart,
+		random,
+	};
 </script>
 
 <div class="container">
@@ -264,47 +205,5 @@
 			{/each}
 		</div>
 	</div>
-	<div class="nextPrevBtn">
-		{#each Object.values(PrevNext) as button}
-			<button
-				class="{String(button)}"
-				on:click="{() => {
-					if (button === PrevNext.next) {
-						carousel.selectedIndex++;
-					} else {
-						carousel.selectedIndex--;
-					}
-					rotateCarousel();
-					carouselAnimation();
-				}}">{button}</button
-			>
-		{/each}
-	</div>
-	<div class="carousel-options">
-		<p>
-			<label>
-				Cells
-				<input class="cells-range" type="range" min="5" max="20" value="{count}" />
-			</label>
-		</p>
-		<p>
-			<button type="button" class="border" on:click="{() => changeCount(5, 20)}">NEW</button>
-			<button type="button" class="border" on:click="{() => carousel.stopCarouselAnimation()}"
-				>STOP</button
-			>
-			<button type="button" class="border" on:click="{animationStart}">START</button>
-		</p>
-
-		<p>
-			Orientation:
-			<label>
-				<input type="radio" name="orientation" value="{CellViewType.Horizontal}" checked />
-				horizontal
-			</label>
-			<label>
-				<input type="radio" name="orientation" value="{CellViewType.Vertical}" />
-				vertical
-			</label>
-		</p>
-	</div>
+	<Options carousel="{carousel}" bind:count="{count}" props="{props}" />
 </div>

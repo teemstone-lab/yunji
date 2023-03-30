@@ -8,6 +8,9 @@ enum RotateType {
 	RotateX = 'rotateX',
 }
 
+export const { Horizontal, Vertical } = CellViewType;
+const { RotateY, RotateX } = RotateType;
+
 export class Carousel {
 	cellCount: number;
 
@@ -23,31 +26,37 @@ export class Carousel {
 
 	carouselDirection: RotateType;
 
-	timerId: string | number | NodeJS.Timeout | undefined;
+	#timerId: string | number | NodeJS.Timeout | undefined;
+
+	#rotateFunction: () => void;
 
 	constructor(cellCount: number) {
 		this.cellCount = cellCount;
-		this.viewMode = CellViewType.Horizontal;
+		this.viewMode = Horizontal;
 		this.theta = 0;
 		this.translateZ = 0;
 		this.angle = 0;
 		this.selectedIndex = 0;
-		this.carouselDirection = RotateType.RotateY;
-		this.timerId = undefined;
+		this.carouselDirection = RotateY;
+		this.#timerId = undefined;
+		this.#rotateFunction = () => {};
 	}
 
-	isChangedCellCount(cellCount: number) {
-		this.cellCount = cellCount;
+	setRotateFunction(f: () => void) {
+		this.#rotateFunction = f;
 	}
 
 	toggleHorizontal(value: CellViewType) {
-		if (value === CellViewType.Horizontal) {
-			this.viewMode = CellViewType.Horizontal;
-			this.carouselDirection = RotateType.RotateY;
+		const isHorizontal = value === Horizontal;
+		const isVertical = value === Vertical;
+
+		if (isHorizontal) {
+			this.viewMode = Horizontal;
+			this.carouselDirection = RotateY;
 		}
-		if (value === CellViewType.Vertical) {
-			this.viewMode = CellViewType.Vertical;
-			this.carouselDirection = RotateType.RotateX;
+		if (isVertical) {
+			this.viewMode = Vertical;
+			this.carouselDirection = RotateX;
 		}
 	}
 
@@ -64,8 +73,8 @@ export class Carousel {
 
 	private debounce(delay: number, f: () => void) {
 		return () => {
-			clearTimeout(this.timerId);
-			this.timerId = setInterval(() => {
+			clearTimeout(this.#timerId);
+			this.#timerId = setInterval(() => {
 				this.selectedIndex++;
 				f();
 			}, delay);
@@ -79,10 +88,10 @@ export class Carousel {
 	}
 
 	stopCarouselAnimation() {
-		clearInterval(this.timerId);
+		clearInterval(this.#timerId);
 	}
 
-	resetAngle(f: () => void) {
+	resetAngle() {
 		if (this.selectedIndex > this.cellCount) {
 			this.angle = 0;
 			this.selectedIndex = 0;
@@ -90,8 +99,8 @@ export class Carousel {
 
 			setTimeout(() => {
 				this.selectedIndex++;
-				f();
-				this.carouselAnimation(3000, f)();
+				this.#rotateFunction();
+				this.carouselAnimation(3000, this.#rotateFunction)();
 			}, 1);
 		}
 	}
