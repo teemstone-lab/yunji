@@ -19,7 +19,7 @@ const numberChecker = (num: number) => {
 };
 
 // 웹 워커에서 메시지 받기
-onmessage = async (event: MessageEvent<CreateNumberRange | MockGroupType[]>) => {
+self.onmessage = async (event: MessageEvent<CreateNumberRange | MockGroupType[]>) => {
 	const newGroup = event.data as CreateNumberRange;
 	const minNum = newGroup.min;
 	const maxNum = newGroup.max;
@@ -71,5 +71,5 @@ onmessage = async (event: MessageEvent<CreateNumberRange | MockGroupType[]>) => 
 
 	const result = isNewGroupsCase ? await mockGroupsCreator(count, true) : await returnGroupList();
 
-	postMessage(result);
+	self.postMessage(result);
 };
