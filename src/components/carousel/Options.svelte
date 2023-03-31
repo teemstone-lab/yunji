@@ -72,7 +72,7 @@
 </style>
 
 <script lang="ts">
-	import { Carousel, Horizontal, Vertical } from './carousel';
+	import { Carousel, CellViewType, Horizontal, Vertical } from './carousel';
 	export let carousel: Carousel;
 	export let count: number;
 	export let props: {
@@ -119,7 +119,7 @@
 
 	// #region cell Range
 	const cellRangeHandle = (e: any) => {
-		const value: number = ((e as Event).target as HTMLInputElement).value;
+		const value: number = Number(((e as Event).target as HTMLInputElement).value);
 		count = value;
 
 		changeCarousel();

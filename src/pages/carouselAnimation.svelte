@@ -99,24 +99,20 @@
 </style>
 
 <script lang="ts">
-	import { Carousel, CellViewType } from '../components/carousel/carousel';
+	import { Carousel, CellViewType, Horizontal } from '../components/carousel/carousel';
 	import { onMount } from 'svelte';
 	import Options from '../components/carousel/Options.svelte';
+	import type { MockGroupType } from 'src/store';
 
 	// #region Web Worker - postmessage
-	const worker = new Worker(new URL('../components/carousel/groupWorker.ts', import.meta.url));
-	const newCreateCount = () => worker.postMessage({ min: 5, max: 20 });
-
-	newCreateCount();
-	// #endregion Web Worker - postmessage
-
-	let count: number;
-
-	const carousel = new Carousel(count);
-
+	// const worker = new Worker(new URL('../components/carousel/groupWorker.ts', import.meta.url));
+	// const newCreateCount = () => worker.postMessage({ min: 5, max: 20 });
+	let worker: Worker;
+	let count: number = 0;
+	let groups: MockGroupType[];
 	let carouselEl: HTMLElement;
 	let cells: NodeListOf<Element>;
-
+	const carousel = new Carousel(count);
 	const rotateCarousel = () => {
 		carousel.rotateCarousel();
 
@@ -125,7 +121,7 @@
 			if (checkCurrentIndex) {
 				carouselEl.style.transition = 'none';
 
-				carousel.resetAngle(rotateCarousel);
+				carousel.resetAngle();
 			} else {
 				carouselEl.style.transition = 'transform 1s';
 			}
@@ -156,6 +152,30 @@
 		rotateCarousel();
 	};
 
+	const initWorker = () => {
+		worker = new Worker(new URL('../components/carousel/groupWorker.ts', import.meta.url));
+		worker.onmessage = (event) => {
+			const newGroups = event.data as MockGroupType[];
+			const newCount = Number(newGroups.length);
+
+			count = newCount;
+			carousel.cellCount = newCount;
+			groups = newGroups;
+
+			changeCarousel();
+			console.log(groups);
+		};
+	};
+
+	const newCreateCount = () => {
+		if (!worker) {
+			initWorker();
+		}
+		worker.postMessage({ min: 5, max: 20 });
+	};
+	newCreateCount();
+	// #endregion Web Worker - postmessage
+
 	const carouselAnimation = carousel.carouselAnimation(3000, rotateCarousel);
 
 	const animationStart = () => {
@@ -173,8 +193,33 @@
 		carouselEl = document.querySelector('.carousel') as HTMLElement;
 		cells = carouselEl && carouselEl.querySelectorAll('.carousel__cell');
 
-		onOrientationChange();
+		onOrientationChange(Horizontal);
 	});
+
+	const sendToWorker = () => {
+		console.log('1초 뒤 시작😎👍');
+		setInterval(() => {
+			// 3초 경과마다 웹 워커로 메시지 보내기
+			// 웹 워커는 메세지를 받고 작업 수행 결과를 보내줌
+			worker.postMessage(groups);
+			// group이랑 초를 같이 넘겨줘야???
+		}, 1000);
+	};
+
+	// #region Web Worker - onmessage
+	if (worker!) {
+		worker.onmessage = (event) => {
+			const newGroups = event.data as MockGroupType[];
+			const newCount = Number(newGroups.length);
+
+			count = newCount;
+			carousel.cellCount = newCount;
+			groups = newGroups;
+
+			changeCarousel();
+			console.log(groups);
+		};
+	}
 
 	setTimeout(() => {
 		// 최초 실행시, 사용자가 3초라는 긴 시간을 기다리지 않도록 하기 위함
@@ -194,30 +239,7 @@
 		animationStart,
 		newCreateCount,
 	};
-	let groups: MockGroupType[];
 
-	const sendToWorker = () => {
-		console.log('1초 뒤 시작😎👍');
-		setInterval(() => {
-			// 3초 경과마다 웹 워커로 메시지 보내기
-			// 웹 워커는 메세지를 받고 작업 수행 결과를 보내줌
-			worker.postMessage(groups);
-			// group이랑 초를 같이 넘겨줘야???
-		}, 1000);
-	};
-
-	// #region Web Worker - onmessage
-	worker.onmessage = (event) => {
-		const newGroups = event.data as MockGroupType[];
-		const newCount = Number(newGroups.length);
-
-		count = newCount;
-		carousel.cellCount = newCount;
-		groups = newGroups;
-
-		changeCarousel();
-		console.log(groups);
-	};
 	// #endregion Web Worker - onmessage
 </script>
 

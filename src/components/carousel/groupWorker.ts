@@ -1,4 +1,4 @@
-// 웹 워커 스크립트 (worker.ts)
+// 웹 워커 스크립트 (groupWorker.ts)
 import type { MockGroupHostType, MockGroupType } from '../../store';
 
 export type {};
