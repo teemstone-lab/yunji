@@ -29,7 +29,7 @@ self.onmessage = async (event: MessageEvent<CreateNumberRange | MockGroupType[]>
 	const count = random(minNum, maxNum);
 
 	//#region 다른 워커랑 통신 테스트 시작~~~
-	const worker = new Worker(new URL('./hostworker1.ts', import.meta.url));
+	const worker = new Worker(new URL('./hostWorker1.ts', import.meta.url));
 
 	const newHostsCreate = (groupName?: string) => {
 		return new Promise((resolve) => {
