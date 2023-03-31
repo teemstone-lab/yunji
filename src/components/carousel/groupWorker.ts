@@ -66,7 +66,7 @@ self.onmessage = async (event: MessageEvent<CreateNumberRange | MockGroupType[]>
 			const data = await newHostsCreate(String(item.name));
 			item.hosts = data as MockGroupHostType[];
 		}
-
+		//
 		return mockGroupList;
 	};
 
