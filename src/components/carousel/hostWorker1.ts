@@ -37,7 +37,7 @@ onmessage = (event: MessageEvent<NewHostType>) => {
 	};
 
 	const result = mockHostsCreator(newHosts.limit, newHosts.isAllTrue);
-
+	//
 	// 메인 스크립트로 결과 보내기
 	postMessage(result);
 };
