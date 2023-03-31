@@ -103,11 +103,14 @@
 	import { onMount } from 'svelte';
 	import Options from '../components/carousel/Options.svelte';
 
-	const random = (min: number, max: number) => {
-		return Math.floor(Math.random() * (max - min + 1)) + min;
-	};
+	// #region Web Worker - postmessage
+	const worker = new Worker(new URL('../components/carousel/groupWorker.ts', import.meta.url));
+	const newCreateCount = () => worker.postMessage({ min: 5, max: 20 });
 
-	let count: number = random(5, 20);
+	newCreateCount();
+	// #endregion Web Worker - postmessage
+
+	let count: number;
 
 	const carousel = new Carousel(count);
 
@@ -189,8 +192,33 @@
 		onOrientationChange,
 		carouselAnimation,
 		animationStart,
-		random,
+		newCreateCount,
 	};
+	let groups: MockGroupType[];
+
+	const sendToWorker = () => {
+		console.log('1초 뒤 시작😎👍');
+		setInterval(() => {
+			// 3초 경과마다 웹 워커로 메시지 보내기
+			// 웹 워커는 메세지를 받고 작업 수행 결과를 보내줌
+			worker.postMessage(groups);
+			// group이랑 초를 같이 넘겨줘야???
+		}, 1000);
+	};
+
+	// #region Web Worker - onmessage
+	worker.onmessage = (event) => {
+		const newGroups = event.data as MockGroupType[];
+		const newCount = Number(newGroups.length);
+
+		count = newCount;
+		carousel.cellCount = newCount;
+		groups = newGroups;
+
+		changeCarousel();
+		console.log(groups);
+	};
+	// #endregion Web Worker - onmessage
 </script>
 
 <div class="container">
@@ -206,4 +234,5 @@
 		</div>
 	</div>
 	<Options carousel="{carousel}" bind:count="{count}" props="{props}" />
+	<button type="button" on:click="{sendToWorker}"> Test Button </button>
 </div>

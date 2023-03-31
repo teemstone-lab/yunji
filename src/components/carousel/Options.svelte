@@ -81,7 +81,7 @@
 		onOrientationChange: (radioValue: CellViewType) => void;
 		carouselAnimation: () => void;
 		animationStart: () => void;
-		random: (min: number, max: number) => number;
+		newCreateCount: () => void;
 	};
 	const {
 		rotateCarousel,
@@ -89,7 +89,7 @@
 		onOrientationChange,
 		carouselAnimation,
 		animationStart,
-		random,
+		newCreateCount,
 	} = props;
 
 	let isActive: boolean = true;
@@ -125,16 +125,6 @@
 		changeCarousel();
 	};
 	// #endregion cell Range
-
-	// #region NEW Random
-	const changeCount = (min: number, max: number) => {
-		const newCount = random(min, max);
-		count = newCount;
-		carousel.cellCount = newCount;
-
-		changeCarousel();
-	};
-	// #endregion NEW Random
 
 	// #region Stop / Play button
 	const actionFunc = (action: Action) => {
@@ -179,9 +169,7 @@
 		</label>
 	</p>
 	<p>
-		<button type="button" class="actionBtn" on:click="{() => changeCount(5, 20)}"
-			>{newRandom}</button
-		>
+		<button type="button" class="actionBtn" on:click="{newCreateCount}">{newRandom}</button>
 
 		{#if isActive}
 			<button

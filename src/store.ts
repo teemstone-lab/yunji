@@ -11,6 +11,30 @@ export type MockHostType = {
 	isOn: boolean;
 };
 
+export type NewHostType = {
+	groupName: string;
+	limit: number;
+	isAllTrue: boolean;
+};
+
+export type MockGroupHostType = {
+	name: string;
+	isOn: boolean;
+	data: {
+		top: number;
+		cpu: number;
+		mem: number;
+		swap: number;
+		disk: number;
+	};
+};
+
+export type MockGroupType = {
+	name: number;
+	isOn: boolean;
+	hosts: MockGroupHostType[];
+};
+
 export type ShowViewerListType = 'on' | 'off' | 'all';
 
 // DateTime
