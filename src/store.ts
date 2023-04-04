@@ -30,7 +30,8 @@ export type MockGroupHostType = {
 };
 
 export type MockGroupType = {
-	name: number;
+	id: string;
+	name: string;
 	isOn: boolean;
 	hosts: MockGroupHostType[];
 };

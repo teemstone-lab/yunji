@@ -26,6 +26,8 @@ export class Carousel {
 
 	carouselDirection: RotateType;
 
+	#clockwise: number;
+
 	#timerId: string | number | NodeJS.Timeout | undefined;
 
 	#rotateFunction: () => void;
@@ -38,6 +40,7 @@ export class Carousel {
 		this.angle = 0;
 		this.selectedIndex = 0;
 		this.carouselDirection = RotateY;
+		this.#clockwise = -1;
 		this.#timerId = undefined;
 		this.#rotateFunction = () => {};
 	}
@@ -48,32 +51,32 @@ export class Carousel {
 
 	toggleHorizontal(value: CellViewType) {
 		const isHorizontal = value === Horizontal;
-		const isVertical = value === Vertical;
 
-		if (isHorizontal) {
-			this.viewMode = Horizontal;
-			this.carouselDirection = RotateY;
-		}
-		if (isVertical) {
-			this.viewMode = Vertical;
-			this.carouselDirection = RotateX;
-		}
+		this.viewMode = value;
+		this.carouselDirection = isHorizontal ? RotateY : RotateX;
+
+		// if ~ else 까지는 OK
+		// 해당 방향은 지양
+		// 컴파일러가 불필요한 일을 덜하도록
+		// 리팩토링 --> 가독성 + 성능최적화 둘 다 고려.
 	}
 
 	rotateCarousel() {
-		this.angle = this.theta * this.selectedIndex * -1;
+		this.angle = this.theta * this.selectedIndex * this.#clockwise;
 		this.translateZ = -this.cellCount * 6;
+		// 숫자 등 --> 의미있는 단어로 정의
 	}
 
 	changeCarousel(index: number) {
 		this.theta = 360 / this.cellCount;
 		this.translateZ = this.cellCount * 6;
 		this.angle = this.theta * index;
+		// 가급적! 무조건! 예외처리 하기
 	}
 
-	private debounce(delay: number, f: () => void) {
+	private intervalAnimation(delay: number, f: () => void) {
 		return () => {
-			clearTimeout(this.#timerId);
+			clearInterval(this.#timerId);
 			this.#timerId = setInterval(() => {
 				this.selectedIndex++;
 				f();
@@ -82,7 +85,7 @@ export class Carousel {
 	}
 
 	carouselAnimation(delay: number, f: () => void) {
-		const result = this.debounce(delay, f);
+		const result = this.intervalAnimation(delay, f);
 
 		return result;
 	}
