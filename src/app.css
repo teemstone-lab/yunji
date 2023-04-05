@@ -43,3 +43,7 @@ html.dark body {
 .animate-move {
 	animation: move 1s ease-in-out infinite -2s;
 }
+
+.text-rtl {
+	direction: rtl;
+}

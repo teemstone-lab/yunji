@@ -9,10 +9,11 @@
 
 	.scene {
 		border: 1px solid #ccc;
-		position: relative;
-		max-width: 420px;
+		/* position: relative; */
+		/* max-width: 400px;
+		min-width: 250px;
 		width: 30%;
-		max-height: 450px;
+		max-height: 500px; */
 		/* height: 28rem; */
 		/* width: 420px;
 		height: 470px; */
@@ -23,7 +24,7 @@
 	.carousel {
 		width: 100%;
 		height: 100%;
-		position: absolute;
+		/* position: absolute; */
 		/* transform: translateZ(-120vw); */
 		transform-style: preserve-3d;
 		transition: transform 1s;
@@ -31,7 +32,6 @@
 
 	.carousel__cell {
 		position: absolute;
-		max-width: 400px;
 		width: 95%;
 		height: 95%;
 		/* width: 400px;
@@ -39,11 +39,8 @@
 		left: 10px;
 		top: 10px;
 		border: 2px solid black;
-		line-height: 250px;
-		font-size: 5.2vw;
-		font-weight: bold;
+		/* font-weight: bold; */
 		color: white;
-		text-align: center;
 		transition: transform 1s, opacity 1s;
 		user-select: none;
 	}
@@ -111,21 +108,12 @@
 	import Options from '../components/carousel/Options.svelte';
 	import type { MockGroupHostType, MockGroupType } from 'src/store';
 
-	// #region Web Worker - postmessage
-	const worker = new Worker(new URL('../components/carousel/groupWorker.ts', import.meta.url));
-
-	const newCreateCount = () => {
-		worker.postMessage({ min: 5, max: 20 });
-	};
-	newCreateCount();
-	// #endregion Web Worker - postmessage
-
 	let count: number = 0;
 	let groups: MockGroupType[];
 	let carouselEl: HTMLElement;
-	let scene: HTMLElement;
 	let cells: NodeListOf<Element>;
 	const carousel = new Carousel(count);
+
 	const rotateCarousel = () => {
 		carousel.rotateCarousel();
 
@@ -166,6 +154,32 @@
 		rotateCarousel();
 	};
 
+	let worker: Worker;
+
+	const initWorker = () => {
+		worker = new Worker(new URL('../components/carousel/groupWorker.ts', import.meta.url));
+		worker.onmessage = (event) => {
+			const newGroups = event.data as MockGroupType[];
+			const newCount = Number(newGroups.length);
+
+			count = newCount;
+			carousel.cellCount = newCount;
+			// groups = null;
+			groups = newGroups;
+
+			changeCarousel();
+		};
+	};
+
+	const newCreateCount = () => {
+		if (!worker) {
+			initWorker();
+		}
+		worker.postMessage({ min: 5, max: 20, groups });
+	};
+	newCreateCount();
+	// #endregion Web Worker - postmessage
+
 	const carouselAnimation = carousel.carouselAnimation(3000, rotateCarousel);
 
 	const animationStart = () => {
@@ -180,17 +194,20 @@
 	};
 
 	onMount(() => {
-		scene = document.querySelector('.scene') as HTMLElement;
+		// scene = document.querySelector('.scene') as HTMLElement;
 		carouselEl = document.querySelector('.carousel') as HTMLElement;
 		cells = carouselEl && carouselEl.querySelectorAll('.carousel__cell');
 
-		scene.style.width = `${(30 * window.innerWidth) / 100}px`;
-		scene.style.height = `${(34 * window.innerWidth) / 100}px`;
+		// scene.style.width = `${(30 * window.innerWidth) / 100}px`;
+		// scene.style.height = `${(34 * window.innerWidth) / 100}px`;
 
 		onOrientationChange(Horizontal);
 	});
 
 	// const sendToWorker = () => {
+	// 	if (!worker) {
+	// 		initWorker();
+	// 	}
 	// 	console.log('1초 뒤 시작😎👍');
 	// 	setInterval(() => {
 	// 		// 1초 경과마다 웹 워커로 메시지 보내기
@@ -200,16 +217,18 @@
 	// sendToWorker();
 
 	// #region Web Worker - onmessage
-	worker.onmessage = (event) => {
-		const newGroups = event.data as MockGroupType[];
-		const newCount = Number(newGroups.length);
+	if (worker!) {
+		worker.onmessage = (event) => {
+			const newGroups = event.data as MockGroupType[];
+			const newCount = Number(newGroups.length);
 
-		count = newCount;
-		carousel.cellCount = newCount;
-		groups = newGroups;
+			count = newCount;
+			carousel.cellCount = newCount;
+			groups = newGroups;
 
-		changeCarousel();
-	};
+			changeCarousel();
+		};
+	}
 	// #endregion Web Worker - onmessage
 
 	setTimeout(() => {
@@ -230,7 +249,9 @@
 	const countIsOnHosts = (hosts: any) => {
 		const totalHosts = hosts as MockGroupHostType[];
 		const isOnHosts = totalHosts.filter((host) => host.isOn === true);
-		return `${isOnHosts.length} / ${totalHosts.length}`;
+
+		const result = { onHosts: isOnHosts.length, totalHosts: totalHosts.length };
+		return result;
 	};
 
 	const cellItems = Array(20)
@@ -264,11 +285,35 @@
 	// 			});
 	// 	}
 	// }
+
+	const topCpu = (hosts: any) => {
+		const groupHosts = hosts as MockGroupHostType[];
+		const cpu = groupHosts
+			.filter((host) => host.isOn === true)
+			.sort((a, b) => b.data.cpu - a.data.cpu)
+			.slice(0, 5);
+
+		return cpu;
+	};
+	const topMem = (hosts: any) => {
+		const groupHosts = hosts as MockGroupHostType[];
+		const mem = groupHosts
+			.filter((host) => host.isOn === true)
+			.sort((a, b) => b.data.mem - a.data.mem)
+			.slice(0, 5);
+
+		return mem;
+	};
 </script>
 
+<svelte:window
+	on:resize="{() => {
+		console.log('aaa');
+	}}"
+/>
+<!-- 디바운싱? 스로틀링? 태워서 해야할 것. -->
 <div class="container">
-	<!-- <div class="mx-auto h-full w-32"> -->
-	<div class="scene">
+	<div class="scene h-80 w-64">
 		<div class="carousel">
 			{#if cellItems}
 				{#each cellItems as item, index}
@@ -286,8 +331,78 @@
 						{#if groups}
 							{#each groups as group (group.id)}
 								{#if groups.indexOf(group) == index}
-									<p>{group.name}</p>
-									<p>{countIsOnHosts(group.hosts)}</p>
+									<div
+										class="flex h-full flex-col items-center justify-between p-4"
+									>
+										<h2
+											class="w-full text-2xl font-semibold
+										">{group.name}</h2
+										>
+										<p class="font-bold"
+											><span class="text-6xl"
+												>{countIsOnHosts(group.hosts).onHosts}</span
+											>
+											<span class="relative -bottom-2 w-max text-xl"
+												>/ {countIsOnHosts(group.hosts).totalHosts}</span
+											></p
+										>
+										<ul class="grid w-full grid-cols-2 gap-4 px-4 text-sm">
+											<li>
+												<p class="font-semibold">CPU</p>
+												<ol class="space-y-1">
+													{#each topCpu(group.hosts) as topHost (topHost.name)}
+														<li
+															class="relative overflow-hidden bg-black bg-opacity-30"
+														>
+															<p
+																class="relative z-[1] flex w-full items-center justify-between rounded border border-white px-0.5 text-black"
+																><span
+																	class="text-rtl inline-block w-2/3 truncate rounded-sm font-medium"
+																	>{topHost.name}</span
+																>
+																<span class="font-semibold">
+																	<!-- 타입 에러로 주석처리 후 커밋. -->
+																	<!-- {topHost.data.cpu} -->
+																</span></p
+															>
+
+															<!-- <div
+																class="absolute -inset-1 inline-block bg-white bg-opacity-50 "
+																style="{`width: ${topHost.data.cpu}%;`}"
+															></div> -->
+														</li>
+													{/each}
+												</ol>
+											</li>
+											<li>
+												<p class="font-semibold">Memory</p>
+												<ol class="space-y-1">
+													{#each topMem(group.hosts) as topHost (topHost.name)}
+														<li
+															class="relative overflow-hidden bg-black bg-opacity-40 "
+														>
+															<p
+																class="relative z-[1] flex w-full items-center justify-between rounded border border-white px-1 text-black"
+																><span
+																	class="text-rtl inline-block w-2/3 truncate rounded-sm font-medium"
+																	>{topHost.name}</span
+																>
+																<span class="font-semibold"
+																	><!-- 타입 에러로 주석처리 후 커밋. -->
+																	<!-- {topHost.data.mem} -->
+																</span></p
+															>
+
+															<!-- <div
+																class="absolute -inset-1 inline-block bg-white bg-opacity-50 "
+																style="{`width: ${topHost.data.mem}%;`}"
+															></div> -->
+														</li>
+													{/each}
+												</ol>
+											</li>
+										</ul>
+									</div>
 								{/if}
 							{/each}
 						{/if}
@@ -297,38 +412,5 @@
 			{/if}
 		</div>
 	</div>
-	<!-- </div> -->
 	<Options carousel="{carousel}" bind:count="{count}" props="{props}" />
-
-	<!-- {#if groups}
-		<div>
-			{#each groups as group (group.id)}
-				<p>GROUP : {group.name}</p>
-				<p>ID : {group.id}</p>
-				<div class="flex gap-4">
-					<p>HOST ▶ </p>
-					<p>{countIsOnHosts(group.hosts)} / {group.hosts.length}</p>
-					{#each group.hosts as hosts}
-						<div>
-							<p>{hosts.name}</p>
-							<p
-								><span
-									class="inline-block h-2 w-2 rounded-full {hosts.isOn === true
-										? 'bg-blue-600'
-										: 'bg-gray-400'} "></span>{hosts.isOn}</p
-							>
-							<dl>
-								{#each Object.entries(hosts.data) as [key, value]}
-									<dt class="rounded-full bg-black px-1 text-center text-white">
-										{key}
-									</dt>
-									<dd class="text-right">{value}</dd>
-								{/each}
-							</dl>
-						</div>
-					{/each}
-				</div>
-			{/each}
-		</div>
-	{/if} -->
 </div>
