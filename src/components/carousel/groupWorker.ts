@@ -29,7 +29,7 @@ onmessage = async (event: MessageEvent<CreateNumberRange | MockGroupType[]>) => 
 	const count = random(minNum, maxNum);
 
 	//#region Sub Worker
-	const worker1 = new Worker(new URL('./hostworker.ts', import.meta.url));
+	const worker1 = new Worker(new URL('./hostWorker.ts', import.meta.url));
 	const worker2 = new Worker(new URL('./hostWorker.ts', import.meta.url));
 	const worker3 = new Worker(new URL('./hostWorker.ts', import.meta.url));
 	const worker4 = new Worker(new URL('./hostWorker.ts', import.meta.url));
