@@ -56,7 +56,7 @@ onmessage = (event: MessageEvent<NewHostType | MockGroupHostType[]>) => {
 	const result = isNewHostsCase
 		? mockHostsCreator(newHosts.limit, newHosts.isAllTrue)
 		: returnHostList();
-	//
+
 	// 메인 워커로 결과 보내기
 	postMessage(result);
 };
