@@ -32,6 +32,12 @@ export class Carousel {
 
 	#rotateFunction: () => void;
 
+	containerWidth: number;
+
+	containerHeight: number;
+
+	cellWidth: number;
+
 	constructor(cellCount: number) {
 		this.cellCount = cellCount;
 		this.viewMode = Horizontal;
@@ -43,6 +49,10 @@ export class Carousel {
 		this.#clockwise = -1;
 		this.#timerId = undefined;
 		this.#rotateFunction = () => {};
+
+		this.containerWidth = 0;
+		this.containerHeight = 0;
+		this.cellWidth = 0;
 	}
 
 	setRotateFunction(f: () => void) {
@@ -61,15 +71,33 @@ export class Carousel {
 		// 리팩토링 --> 가독성 + 성능최적화 둘 다 고려.
 	}
 
+	private calcTranslateZ(isNegative?: boolean) {
+		const result =
+			Math.round(this.cellWidth / 2 / Math.tan(Math.PI / this.cellCount)) + this.theta;
+
+		return isNegative ? result * -1 : result;
+
+		// Math.PI = 원주율(π)
+		// Math.tan() 함수 = 주어진 각도의 탄젠트 값을 반환
+
+		// Math.PI / this.cellCount = 삼각형의 한 각도의 크기
+		// Math.tan(Math.PI / this.cellCount) = 이 각도의 탄젠트 값을 계산.
+
+		// this.cellWidth / 2 = 삼각형의 밑변의 절반 길이.
+		// this.cellWidth / 2 / Math.tan(Math.PI / this.cellCount) = 삼각형의 높이(h)를 계산.
+
+		// Math.round() 함수 = 인자로 전달된 값을 반올림.
+		// Math.round(this.cellWidth / 2 / Math.tan(Math.PI / this.cellCount)) = 삼각형의 높이(h)를 반올림한 값.
+	}
+
 	rotateCarousel() {
 		this.angle = this.theta * this.selectedIndex * this.#clockwise;
-		this.translateZ = -this.cellCount * 6;
-		// 숫자 등 --> 의미있는 단어로 정의
+		this.translateZ = this.calcTranslateZ(true);
 	}
 
 	changeCarousel(index: number) {
 		this.theta = 360 / this.cellCount;
-		this.translateZ = this.cellCount * 6;
+		this.translateZ = this.calcTranslateZ();
 		this.angle = this.theta * index;
 		// 가급적! 무조건! 예외처리 하기
 	}
@@ -106,5 +134,10 @@ export class Carousel {
 				this.carouselAnimation(3000, this.#rotateFunction)();
 			}, 1);
 		}
+	}
+
+	calcContainerSize(containerWidth: number) {
+		this.containerWidth = containerWidth;
+		this.containerHeight = this.containerWidth / 2;
 	}
 }

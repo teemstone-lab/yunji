@@ -12,12 +12,14 @@ export type MockHostType = {
 };
 
 export type NewHostType = {
+	id?: Array<string>;
 	groupName: string;
 	limit: number;
 	isAllTrue: boolean;
 };
 
 export type MockGroupHostType = {
+	id: string;
 	name: string;
 	isOn: boolean;
 	data: {
@@ -32,6 +34,7 @@ export type MockGroupHostType = {
 export type MockGroupType = {
 	id: string;
 	name: string;
+	order: number;
 	isOn: boolean;
 	hosts: MockGroupHostType[];
 };

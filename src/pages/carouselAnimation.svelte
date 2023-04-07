@@ -1,20 +1,22 @@
 <style>
 	.container {
+		display: flex;
+		align-items: center;
 		margin: 0 auto;
+		max-width: 1500px;
+		min-width: 500px;
 		width: 100%;
-		height: 100%;
-		/* position: relative; */
-		padding: 100px 0;
+		min-height: 250px;
+		border: 1px solid red;
 	}
-
 	.scene {
 		border: 1px solid #ccc;
 		/* position: relative; */
-		/* max-width: 400px;
-		min-width: 250px;
+		max-width: 400px;
+		/* min-width: 250px; */
 		width: 30%;
-		max-height: 500px; */
-		/* height: 28rem; */
+		max-height: 800px;
+		height: 75%;
 		/* width: 420px;
 		height: 470px; */
 		margin: 0 auto;
@@ -32,12 +34,13 @@
 
 	.carousel__cell {
 		position: absolute;
-		width: 95%;
-		height: 95%;
+		width: 96%;
+		height: 96%;
 		/* width: 400px;
 		height: 450px; */
 		left: 10px;
 		top: 10px;
+		padding: 4%;
 		border: 2px solid black;
 		/* font-weight: bold; */
 		color: white;
@@ -72,7 +75,7 @@
 	.carousel__cell:nth-child(9n + 0) {
 		background: hsla(320, 100%, 50%, 0.8);
 	}
-
+	/* 
 	.carousel__cell:nth-child(1) {
 		transform: rotateY(0deg) translateZ(120vw);
 	}
@@ -99,7 +102,7 @@
 	}
 	.carousel__cell:nth-child(9) {
 		transform: rotateY(320deg) translateZ(120vw);
-	}
+	} */
 </style>
 
 <script lang="ts">
@@ -112,22 +115,25 @@
 	let groups: MockGroupType[];
 	let carouselEl: HTMLElement;
 	let cells: NodeListOf<Element>;
+	let scene: HTMLElement;
+	let container: HTMLElement;
 	const carousel = new Carousel(count);
 
 	const rotateCarousel = () => {
 		carousel.rotateCarousel();
 
 		if (carouselEl) {
-			const checkCurrentIndex = carousel.selectedIndex > carousel.cellCount;
+			const checkCurrentIndex =
+				carousel.selectedIndex > carousel.cellCount &&
+				carouselEl.style.transform.includes('rotateY(-360deg)');
 
 			if (checkCurrentIndex) {
 				carouselEl.style.transition = 'none';
-
 				carousel.resetAngle();
 			} else {
 				carouselEl.style.transition = 'transform 1s';
 			}
-			carouselEl.style.transform = `translateZ(${carousel.translateZ}vw) ${carousel.carouselDirection}(${carousel.angle}deg)`;
+			carouselEl.style.transform = `translateZ(${carousel.translateZ}px) ${carousel.carouselDirection}(${carousel.angle}deg)`;
 		}
 	};
 
@@ -143,7 +149,7 @@
 				// visible cell
 				cell.style.opacity = String(1);
 				let cellAngle = carousel.theta * i;
-				cell.style.transform = `${carousel.carouselDirection}(${cellAngle}deg) translateZ(${carousel.translateZ}vw)`;
+				cell.style.transform = `${carousel.carouselDirection}(${cellAngle}deg) translateZ(${carousel.translateZ}px)`;
 			} else {
 				// hidden cell
 				cell.style.opacity = String(0);
@@ -164,7 +170,6 @@
 
 			count = newCount;
 			carousel.cellCount = newCount;
-			// groups = null;
 			groups = newGroups;
 
 			changeCarousel();
@@ -194,27 +199,18 @@
 	};
 
 	onMount(() => {
-		// scene = document.querySelector('.scene') as HTMLElement;
+		scene = document.querySelector('.scene') as HTMLElement;
 		carouselEl = document.querySelector('.carousel') as HTMLElement;
 		cells = carouselEl && carouselEl.querySelectorAll('.carousel__cell');
+		container = document.querySelector('.container') as HTMLElement;
 
-		// scene.style.width = `${(30 * window.innerWidth) / 100}px`;
-		// scene.style.height = `${(34 * window.innerWidth) / 100}px`;
+		carousel.calcContainerSize(container.offsetWidth);
+		carousel.cellWidth = Number((cells[0] as HTMLElement).offsetWidth);
+
+		container.style.height = `${carousel.containerHeight}px`;
 
 		onOrientationChange(Horizontal);
 	});
-
-	// const sendToWorker = () => {
-	// 	if (!worker) {
-	// 		initWorker();
-	// 	}
-	// 	console.log('1초 뒤 시작😎👍');
-	// 	setInterval(() => {
-	// 		// 1초 경과마다 웹 워커로 메시지 보내기
-	// 		worker.postMessage(groups);
-	// 	}, 1000);
-	// };
-	// sendToWorker();
 
 	// #region Web Worker - onmessage
 	if (worker!) {
@@ -258,34 +254,6 @@
 		.fill(0)
 		.map((_, i) => i + 1);
 
-	// let cellItems;
-	// $: {
-	// 	if (groups) {
-	// 		console.log('aa');
-	// 		cellItems = Array(20)
-	// 			.fill(null)
-	// 			.map((_, i) => {
-	// 				const keyName = i + 1;
-	// 				console.log('groups: ', groups);
-
-	// 				let testest;
-	// 				if (i < groups.length) {
-	// 					console.log('groups[i].hosts', groups[i]);
-	// 					console.log('${groups[i].hosts.length}', groups[i].hosts.length);
-	// 					testest = `${countIsOnHosts(groups[i].hosts)} / ${groups[i].hosts.length}`;
-	// 				} else {
-	// 					console.log('WOW~~~~');
-	// 					testest = 'TEST~~~~';
-	// 				}
-
-	// 				const groupHosts = {
-	// 					[keyName]: testest,
-	// 				};
-	// 				return groupHosts;
-	// 			});
-	// 	}
-	// }
-
 	const topCpu = (hosts: any) => {
 		const groupHosts = hosts as MockGroupHostType[];
 		const cpu = groupHosts
@@ -304,112 +272,131 @@
 
 		return mem;
 	};
+
+	const debounce = (callback: () => void, delay: number) => {
+		let timerId: NodeJS.Timeout | null;
+
+		return () => {
+			if (timerId) {
+				clearTimeout(timerId);
+			}
+			timerId = setTimeout(() => {
+				callback();
+				timerId = null;
+			}, delay);
+		};
+	};
+	const resizingContainer = () => {
+		carousel.calcContainerSize(container.offsetWidth);
+		container.style.height = `${carousel.containerHeight}px`;
+		carousel.cellWidth = Number((cells[0] as HTMLElement).offsetWidth);
+	};
 </script>
 
 <svelte:window
 	on:resize="{() => {
-		console.log('aaa');
+		debounce(resizingContainer, 1000)();
 	}}"
 />
-<!-- 디바운싱? 스로틀링? 태워서 해야할 것. -->
-<div class="container">
-	<div class="scene h-80 w-64">
-		<div class="carousel">
-			{#if cellItems}
-				{#each cellItems as item, index}
-					<!-- <div class="pt-[35%]"> -->
-					<div
-						class="carousel__cell"
-						on:mouseenter="{() => carousel.stopCarouselAnimation()}"
-						on:mouseleave="{() => carouselAnimation()}"
-					>
-						<!-- {#each Object.entries(item) as [key, value]}<p>{key}</p>
+<div class="mx-auto h-full w-full p-[100px]">
+	<div class="container">
+		<div class="scene">
+			<div class="carousel">
+				{#if cellItems}
+					{#each cellItems as item, index}
+						<div
+							class="carousel__cell"
+							on:mouseenter="{() => carousel.stopCarouselAnimation()}"
+							on:mouseleave="{() => carouselAnimation()}"
+						>
+							<!-- {#each Object.entries(item) as [key, value]}<p>{key}</p>
 							<p>{value}</p>
 						{/each} -->
-						<!-- <p>{item}</p> -->
+							<!-- <p>{item}</p> -->
 
-						{#if groups}
-							{#each groups as group (group.id)}
-								{#if groups.indexOf(group) == index}
-									<div
-										class="flex h-full flex-col items-center justify-between p-4"
-									>
-										<h2
-											class="w-full text-2xl font-semibold
+							{#if groups}
+								{#each groups as group (group.id)}
+									{#if groups.indexOf(group) == index}
+										<div
+											class="flex h-full flex-col items-center justify-between"
+										>
+											<h2
+												class="w-full text-lg font-semibold lg:text-2xl
 										">{group.name}</h2
-										>
-										<p class="font-bold"
-											><span class="text-6xl"
-												>{countIsOnHosts(group.hosts).onHosts}</span
 											>
-											<span class="relative -bottom-2 w-max text-xl"
-												>/ {countIsOnHosts(group.hosts).totalHosts}</span
-											></p
-										>
-										<ul class="grid w-full grid-cols-2 gap-4 px-4 text-sm">
-											<li>
-												<p class="font-semibold">CPU</p>
-												<ol class="space-y-1">
-													{#each topCpu(group.hosts) as topHost (topHost.name)}
-														<li
-															class="relative overflow-hidden bg-black bg-opacity-30"
-														>
-															<p
-																class="relative z-[1] flex w-full items-center justify-between rounded border border-white px-0.5 text-black"
-																><span
-																	class="text-rtl inline-block w-2/3 truncate rounded-sm font-medium"
-																	>{topHost.name}</span
-																>
-																<span class="font-semibold">
-																	<!-- 타입 에러로 주석처리 후 커밋. -->
-																	<!-- {topHost.data.cpu} -->
-																</span></p
+											<p class="font-bold"
+												><span class="text-6xl"
+													>{countIsOnHosts(group.hosts).onHosts}</span
+												>
+												<span class="relative -bottom-2 w-max text-xl"
+													>/ {countIsOnHosts(group.hosts)
+														.totalHosts}</span
+												></p
+											>
+											<ul class="grid w-full grid-cols-2 gap-4 px-4 text-sm">
+												<li>
+													<p class="font-semibold">CPU</p>
+													<ol class="space-y-1">
+														{#each topCpu(group.hosts) as topHost (topHost.name)}
+															<li
+																class="relative overflow-hidden rounded bg-black bg-opacity-30"
 															>
-
-															<!-- <div
-																class="absolute -inset-1 inline-block bg-white bg-opacity-50 "
-																style="{`width: ${topHost.data.cpu}%;`}"
-															></div> -->
-														</li>
-													{/each}
-												</ol>
-											</li>
-											<li>
-												<p class="font-semibold">Memory</p>
-												<ol class="space-y-1">
-													{#each topMem(group.hosts) as topHost (topHost.name)}
-														<li
-															class="relative overflow-hidden bg-black bg-opacity-40 "
-														>
-															<p
-																class="relative z-[1] flex w-full items-center justify-between rounded border border-white px-1 text-black"
-																><span
-																	class="text-rtl inline-block w-2/3 truncate rounded-sm font-medium"
-																	>{topHost.name}</span
+																<p
+																	class="relative z-[1] flex w-full items-center justify-between rounded border border-white px-0.5 text-black"
+																	><span
+																		class="text-rtl inline-block w-2/3 truncate rounded-sm font-medium"
+																		>{topHost.name}</span
+																	>
+																	<span class="font-semibold">
+																		<!-- 타입 에러로 주석처리 후 커밋. -->
+																		<!-- {topHost.data.cpu} -->
+																	</span></p
 																>
-																<span class="font-semibold"
-																	><!-- 타입 에러로 주석처리 후 커밋. -->
-																	<!-- {topHost.data.mem} -->
-																</span></p
-															>
 
-															<!-- <div
-																class="absolute -inset-1 inline-block bg-white bg-opacity-50 "
-																style="{`width: ${topHost.data.mem}%;`}"
-															></div> -->
-														</li>
-													{/each}
-												</ol>
-											</li>
-										</ul>
-									</div>
-								{/if}
-							{/each}
-						{/if}
-					</div>
-					<!-- </div> -->
-				{/each}
-			{/if}
+																<!-- <div
+																	class="absolute -inset-1 inline-block bg-white bg-opacity-50 "
+																	style="{`width: ${topHost.data.cpu}%;`}"
+																></div> -->
+															</li>
+														{/each}
+													</ol>
+												</li>
+												<li>
+													<p class="font-semibold">Memory</p>
+													<ol class="space-y-1">
+														{#each topMem(group.hosts) as topHost (topHost.name)}
+															<li
+																class="relative overflow-hidden bg-black bg-opacity-40 "
+															>
+																<p
+																	class="relative z-[1] flex w-full items-center justify-between rounded border border-white px-1 text-black"
+																	><span
+																		class="text-rtl inline-block w-2/3 truncate rounded-sm font-medium"
+																		>{topHost.name}</span
+																	>
+																	<span class="font-semibold"
+																		><!-- 타입 에러로 주석처리 후 커밋. -->
+																		<!-- {topHost.data.mem} -->
+																	</span></p
+																>
+
+																<!-- <div
+																	class="absolute -inset-1 inline-block bg-white bg-opacity-50 "
+																	style="{`width: ${topHost.data.mem}%;`}"
+																></div> -->
+															</li>
+														{/each}
+													</ol>
+												</li>
+											</ul>
+										</div>
+									{/if}
+								{/each}
+							{/if}
+						</div>
+					{/each}
+				{/if}
+			</div>
 		</div>
 	</div>
 	<Options carousel="{carousel}" bind:count="{count}" props="{props}" />
