@@ -132,12 +132,17 @@ export class Carousel {
 				this.selectedIndex++;
 				this.#rotateFunction();
 				this.carouselAnimation(3000, this.#rotateFunction)();
-			}, 1);
+			}, 100);
 		}
 	}
 
 	calcContainerSize(containerWidth: number) {
-		this.containerWidth = containerWidth;
-		this.containerHeight = this.containerWidth / 2;
+		if (this.viewMode === Horizontal) {
+			this.containerWidth = containerWidth;
+			this.containerHeight = this.containerWidth / 2;
+		} else {
+			this.containerWidth = containerWidth;
+			this.containerHeight = this.containerWidth * 2;
+		}
 	}
 }

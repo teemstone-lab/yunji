@@ -17,6 +17,14 @@ const numberChecker = (num: number) => {
 	return checkNumSize;
 };
 
+const countIsOnHosts = (hosts: MockGroupHostType[]) => {
+	const totalHosts = hosts;
+	const isOnHosts = totalHosts.filter((host) => host.isOn === true);
+
+	const result = { onHosts: isOnHosts.length, totalHosts: totalHosts.length };
+	return result;
+};
+
 type HostType = {
 	id: string;
 	groupItem: {
@@ -25,6 +33,7 @@ type HostType = {
 		order: number;
 		isOn: boolean;
 		hosts: MockGroupHostType[];
+		countHosts: { onHosts: number; totalHosts: number };
 	};
 };
 
@@ -42,7 +51,6 @@ onmessage = (e: MessageEvent<HostType>) => {
 				name: `${groupItem.name}-${i + 1}`,
 				isOn: isOn ? isOn : numberChecker(Math.random()),
 				data: {
-					top: randomNumber(Math.random()),
 					cpu: randomNumber(Math.random()),
 					mem: randomNumber(Math.random()),
 					swap: randomNumber(Math.random()),
@@ -50,6 +58,12 @@ onmessage = (e: MessageEvent<HostType>) => {
 				},
 			};
 		}
+
+		groupItem.countHosts = countIsOnHosts(groupItem.hosts);
+
+		if (groupItem.hosts.length === limit) {
+		}
+
 		return groupItem.hosts;
 	};
 
@@ -58,13 +72,13 @@ onmessage = (e: MessageEvent<HostType>) => {
 		for (const item of existData.groupItem.hosts) {
 			item.isOn = numberChecker(Math.random());
 			item.data = {
-				top: randomNumber(Math.random()),
 				cpu: randomNumber(Math.random()),
 				mem: randomNumber(Math.random()),
 				swap: randomNumber(Math.random()),
 				disk: randomNumber(Math.random()),
 			};
 		}
+		groupItem.countHosts = countIsOnHosts(groupItem.hosts);
 		return existData;
 	};
 

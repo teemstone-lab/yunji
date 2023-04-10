@@ -23,12 +23,19 @@ export type MockGroupHostType = {
 	name: string;
 	isOn: boolean;
 	data: {
-		top: number;
 		cpu: number;
 		mem: number;
 		swap: number;
 		disk: number;
 	};
+};
+
+type TopHost = { id: string; name: string; isOn: boolean; data: number };
+export type TopHosts = {
+	cpu: TopHost[];
+	mem: TopHost[];
+	swap: TopHost[];
+	disk: TopHost[];
 };
 
 export type MockGroupType = {
@@ -37,6 +44,8 @@ export type MockGroupType = {
 	order: number;
 	isOn: boolean;
 	hosts: MockGroupHostType[];
+	countHosts: { onHosts: number; totalHosts: number };
+	topHosts: TopHosts;
 };
 
 export type ShowViewerListType = 'on' | 'off' | 'all';

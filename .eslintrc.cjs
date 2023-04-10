@@ -40,6 +40,8 @@ module.exports = {
 		],
 		'no-unused-vars': 'warn',
     "@typescript-eslint/no-inferrable-types": "off",
+	"@typescript-eslint/no-unsafe-member-access": "off",
+	"@typescript-eslint/no-unsafe-call": "off",
 	},
   ignorePatterns: ['build/*', 'node_modules/*','.eslintrc.cjs'],
 	overrides: [

@@ -75,21 +75,24 @@
 	import { Carousel, CellViewType, Horizontal, Vertical } from './carousel';
 	export let carousel: Carousel;
 	export let count: number;
+	export let isStop: boolean;
 	export let props: {
+		numberOfCells: { min: number; max: number };
 		rotateCarousel: () => void;
 		changeCarousel: () => void;
 		onOrientationChange: (radioValue: CellViewType) => void;
 		carouselAnimation: () => void;
 		animationStart: () => void;
-		newCreateCount: () => void;
+		// newCreateCount: () => void;
 	};
 	const {
+		numberOfCells,
 		rotateCarousel,
 		changeCarousel,
 		onOrientationChange,
 		carouselAnimation,
 		animationStart,
-		newCreateCount,
+		// newCreateCount,
 	} = props;
 
 	let isActive: boolean = true;
@@ -98,11 +101,11 @@
 	const directions: Direction[] = ['prev', 'next'];
 
 	enum Action {
-		newRandom = 'NEW',
+		// newRandom = 'NEW',
 		stop = 'STOP',
 		play = 'PLAY',
 	}
-	const { newRandom, stop, play } = Action;
+	const { stop, play } = Action;
 
 	// #region Prev-Next button
 	const prevNextBtn = (button: Direction) => {
@@ -130,10 +133,12 @@
 	const actionFunc = (action: Action) => {
 		if (action === 'STOP') {
 			carousel.stopCarouselAnimation();
+			isStop = true;
 			isActive = false;
 		}
 		if (action === 'PLAY') {
 			animationStart();
+			isStop = false;
 			isActive = true;
 		}
 	};
@@ -160,8 +165,8 @@
 			<input
 				class="cells-range"
 				type="range"
-				min="5"
-				max="20"
+				min="{numberOfCells.min}"
+				max="{numberOfCells.max}"
 				title="{String(count)}"
 				value="{count}"
 				on:change="{cellRangeHandle}"
@@ -169,7 +174,7 @@
 		</label>
 	</p>
 	<p>
-		<button type="button" class="actionBtn" on:click="{newCreateCount}">{newRandom}</button>
+		<!-- <button type="button" class="actionBtn" on:click="{newCreateCount}">{newRandom}</button> -->
 
 		{#if isActive}
 			<button

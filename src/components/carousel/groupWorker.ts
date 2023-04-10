@@ -1,5 +1,5 @@
 // 웹 워커 스크립트 (groupWorker.ts)
-import type { MockGroupType } from '../../store';
+import type { MockGroupHostType, MockGroupType } from '../../store';
 export type {};
 
 type CreateNewGroups = {
@@ -28,6 +28,44 @@ const worker4 = new Worker(new URL('./hostWorker.ts', import.meta.url));
 
 const workers = { worker1, worker2, worker3, worker4 };
 const workersCount = Object.keys(workers).length;
+
+const topDatas = (hosts: MockGroupHostType[]) => {
+	const groupHosts = hosts;
+
+	const cpu = groupHosts
+		.sort((a, b) => b.data.cpu - a.data.cpu)
+		.filter((host) => host.isOn === true)
+		.map((host) => {
+			return { id: host.id, name: host.name, data: host.data.cpu };
+		})
+		.slice(0, 5);
+
+	const mem = groupHosts
+		.sort((a, b) => b.data.mem - a.data.mem)
+		.filter((host) => host.isOn === true)
+		.map((host) => {
+			return { id: host.id, name: host.name, data: host.data.mem };
+		})
+		.slice(0, 5);
+
+	const swap = groupHosts
+		.sort((a, b) => b.data.swap - a.data.swap)
+		.filter((host) => host.isOn === true)
+		.map((host) => {
+			return { id: host.id, name: host.name, data: host.data.swap };
+		})
+		.slice(0, 5);
+
+	const disk = groupHosts
+		.sort((a, b) => b.data.disk - a.data.disk)
+		.filter((host) => host.isOn === true)
+		.map((host) => {
+			return { id: host.id, name: host.name, data: host.data.disk };
+		})
+		.slice(0, 5);
+
+	return { cpu, mem, swap, disk } as { cpu: []; mem: []; swap: []; disk: [] };
+};
 
 // 웹 워커에서 메시지 받기
 onmessage = (event: MessageEvent<CreateNewGroups | MockGroupType[]>) => {
@@ -70,6 +108,8 @@ onmessage = (event: MessageEvent<CreateNewGroups | MockGroupType[]>) => {
 			// isOn: isOn ? isOn : numberChecker(Math.random()),
 			isOn: true,
 			hosts: [],
+			countHosts: {},
+			topHosts: { cpu: [], mem: [], swap: [], disk: [] },
 		};
 
 		if (i < workersCount) {
@@ -88,6 +128,8 @@ onmessage = (event: MessageEvent<CreateNewGroups | MockGroupType[]>) => {
 
 		worker.onmessage = (e) => {
 			const data = e.data as GroupType;
+
+			data.groupItem.topHosts = topDatas(data.groupItem.hosts);
 			result[data.groupItem.order] = data.groupItem;
 
 			const nonEmptyValues = result.filter((item) => item !== undefined && item !== null);
