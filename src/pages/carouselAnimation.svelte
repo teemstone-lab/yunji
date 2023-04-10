@@ -29,21 +29,6 @@
 	};
 	newCreateCount();
 	// #endregion Web Worker - postmessage
-
-	// #region Web Worker - onmessage
-	// if (worker!) {
-	// 	worker.onmessage = (event) => {
-	// 		const newGroups = event.data as MockGroupType[];
-	// 		const newCount = Number(newGroups.length);
-
-	// 		count = newCount;
-	// 		carousel.cellCount = newCount;
-	// 		groups = newGroups;
-
-	// 		changeCarousel();
-	// 	};
-	// }
-	// #endregion Web Worker - onmessage
 </script>
 
 <div class="mx-auto h-full w-full p-[100px]">
@@ -51,7 +36,7 @@
 		<Carousel
 			numberOfCells="{{ min: 5, max: count }}"
 			bind:datas="{groups}"
-			showTopData="{['cpu', 'disk']}"
+			showTopData="{['cpu', 'mem']}"
 		/>
 	{/if}
 </div>

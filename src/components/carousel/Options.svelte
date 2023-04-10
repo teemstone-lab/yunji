@@ -11,6 +11,14 @@
 		position: relative;
 		z-index: 2;
 		background: hsla(0, 0%, 100%, 0.8);
+
+		margin: 0 auto;
+		opacity: 0.4;
+		transition: 0.5s;
+	}
+
+	.carousel-options:hover {
+		opacity: 1;
 	}
 	.nextPrevBtn {
 		/* position: absolute; */
@@ -176,15 +184,13 @@
 		</label>
 	</p>
 	<p>
-		<!-- <button type="button" class="actionBtn" on:click="{newCreateCount}">{newRandom}</button> -->
-
 		{#if isActive}
 			<button
 				type="button"
 				class="actionBtn stop"
 				on:click="{() => {
 					actionFunc(stop);
-				}}">{stop}</button
+				}}">Auto Animation {stop}</button
 			>
 		{:else}
 			<button
@@ -192,7 +198,7 @@
 				class="actionBtn play"
 				on:click="{() => {
 					actionFunc(play);
-				}}">{play}</button
+				}}">Auto Animation {play}</button
 			>
 		{/if}
 	</p>
@@ -205,7 +211,8 @@
 					name="orientation"
 					value="{orientation}"
 					checked="{carousel.viewMode === orientation}"
-					on:click="{() => onOrientationChange(orientation)}"
+					on:click="{() =>
+						carousel.viewMode !== orientation && onOrientationChange(orientation)}"
 				/>
 				{orientation}
 			</label>

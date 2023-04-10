@@ -5,7 +5,6 @@
 	import OnTuneViewer from './pages/onTuneViewer.svelte';
 	import Nav from './components/nav/Nav.svelte';
 	import Calculator from './components/calculator/Calculator.svelte';
-	// import WorkerAnimation from './pages/workerAnimation.svelte';
 	import CarouselAnimation from './pages/carouselAnimation.svelte';
 
 	type ClickEvent = MouseEvent & {
@@ -24,20 +23,13 @@
 		<div class="px-4">
 			<Index />
 		</div>
-	{/if}
-	<!-- {#if currentPage === 'workerAnimation'}
-		<WorkerAnimation />
-	{/if} -->
-	{#if currentPage === 'carouselAnimation'}
+	{:else if currentPage === 'carouselAnimation'}
 		<CarouselAnimation />
-	{/if}
-	{#if currentPage === 'onTuneViewer'}
+	{:else if currentPage === 'onTuneViewer'}
 		<OnTuneViewer />
-	{/if}
-	{#if currentPage === 'webWorker'}
+	{:else if currentPage === 'webWorker'}
 		<WebWorker />
-	{/if}
-	{#if currentPage === 'calculator'}
+	{:else if currentPage === 'calculator'}
 		<Calculator />
 	{/if}
 </main>

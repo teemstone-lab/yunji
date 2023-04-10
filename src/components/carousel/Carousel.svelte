@@ -10,7 +10,7 @@
 		border: 1px solid red;
 	}
 	.scene {
-		border: 1px solid #ccc;
+		/* border: 1px solid #ccc; */
 		/* position: relative; */
 		/* max-width: 400px; */
 		/* min-width: 250px; */
@@ -31,6 +31,7 @@
 		height: 100%;
 		transform-style: preserve-3d;
 		transition: transform 1s;
+		will-change: auto;
 	}
 
 	.carousel__cell {
@@ -44,6 +45,7 @@
 		color: white;
 		transition: transform 1s, opacity 1s;
 		user-select: none;
+		will-change: auto;
 	}
 
 	.carousel__cell:nth-child(9n + 1) {
@@ -103,13 +105,17 @@
 
 	let isStop: boolean = false;
 	let count: number = datas.length;
+
 	let carouselEl: HTMLElement;
 	let cells: NodeListOf<Element>;
 	let scene: HTMLElement;
+
 	let groupName: NodeListOf<Element>;
 	let onHosts: NodeListOf<Element>;
 	let topDatas: NodeListOf<Element>;
+
 	let container: HTMLElement;
+
 	const carousel = new Carousel(count);
 
 	const rotateCarousel = () => {
@@ -196,29 +202,33 @@
 
 	const adjustStyles = (
 		props: NodeListOf<Element>,
-		type: 'display' | 'groupName' | 'onHosts',
+		type: 'display' | 'gridCol' | 'groupName' | 'onHosts',
 	) => {
 		for (let i = 0; i < props.length; i++) {
-			let topData = props[i] as HTMLElement;
+			let prop = props[i] as HTMLElement;
 
 			switch (type) {
 				case 'display':
 					if (scene.offsetWidth < 240) {
 						// visible cell
-						topData.style.display = 'none';
+						prop.style.display = 'none';
 					} else {
 						// hidden cell
-						topData.style.display = 'grid';
+						prop.style.display = 'grid';
 					}
+					break;
+				case 'gridCol':
+					prop.style.gridTemplateColumns = `repeat(${showTopData.length}, minmax(0, 1fr))`;
+
 					break;
 				case 'groupName':
 					const groupNameSize = (8 * scene.offsetWidth) / 100;
-					topData.style.fontSize = `${groupNameSize}px`;
+					prop.style.fontSize = `${groupNameSize}px`;
 
 					break;
 				case 'onHosts':
 					const onHostsSize = (20 * scene.offsetWidth) / 100;
-					topData.style.fontSize = `${onHostsSize}px`;
+					prop.style.fontSize = `${onHostsSize}px`;
 
 					break;
 			}
@@ -241,6 +251,7 @@
 		container.style.height = `${carousel.containerHeight}px`;
 
 		adjustStyles(topDatas, 'display');
+		adjustStyles(topDatas, 'gridCol');
 		adjustStyles(groupName, 'groupName');
 		adjustStyles(onHosts, 'onHosts');
 
@@ -332,7 +343,7 @@
 													class="relative overflow-hidden rounded bg-black bg-opacity-30"
 												>
 													<p
-														class="relative z-[1] flex w-full items-center justify-between rounded border border-white px-0.5 text-black"
+														class="relative z-[1] flex w-full items-center justify-between rounded border border-white px-1 text-black"
 														><span
 															class="text-rtl inline-block w-2/3 truncate rounded-sm font-medium"
 															>{data.name}</span
