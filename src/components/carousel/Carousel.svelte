@@ -24,10 +24,11 @@
 	}
 
 	.carousel {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		width: 100%;
 		height: 100%;
-		/* position: absolute; */
-		/* transform: translateZ(-120vw); */
 		transform-style: preserve-3d;
 		transition: transform 1s;
 	}
@@ -38,11 +39,8 @@
 		height: 96%;
 		/* width: 400px;
 		height: 450px; */
-		left: 10px;
-		top: 10px;
 		padding: 4%;
 		border: 2px solid black;
-		/* font-weight: bold; */
 		color: white;
 		transition: transform 1s, opacity 1s;
 		user-select: none;
@@ -75,23 +73,42 @@
 	.carousel__cell:nth-child(9n + 0) {
 		background: hsla(320, 100%, 50%, 0.8);
 	}
+
+	.groupName {
+		width: 100%;
+		font-size: 24px;
+		font-weight: 600;
+	}
+	.countHosts {
+		font-weight: 700;
+	}
+	.topDatas {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+		width: 100%;
+		padding: 0 1rem;
+		font-size: 14px;
+	}
 </style>
 
 <script lang="ts">
 	import { Carousel, CellViewType, Vertical } from './carousel';
 	import { onMount } from 'svelte';
 	import Options from './Options.svelte';
-	import type { MockGroupType } from 'src/store';
+	import type { DataType, MockGroupType } from 'src/store';
 	export let numberOfCells: { min: number; max: number };
 	export let datas: MockGroupType[];
-	export let showTopData: Array<'cpu' | 'mem' | 'swap' | 'disk'>;
+	export let showTopData: Array<DataType>;
 
 	let isStop: boolean = false;
 	let count: number = datas.length;
-	// let groups: MockGroupType[];
 	let carouselEl: HTMLElement;
 	let cells: NodeListOf<Element>;
 	let scene: HTMLElement;
+	let groupName: NodeListOf<Element>;
+	let onHosts: NodeListOf<Element>;
+	let topDatas: NodeListOf<Element>;
 	let container: HTMLElement;
 	const carousel = new Carousel(count);
 
@@ -170,11 +187,42 @@
 			scene.style.height = `75%`;
 			carousel.cellWidth = Number((cells[0] as HTMLElement).offsetWidth);
 		}
-		console.log('cellWidth: ', cellWidth);
+		// console.log('cellWidth: ', cellWidth);
 		carousel.cellWidth = cellWidth;
-		console.log('carousel.cellWidth: ', carousel.cellWidth);
+		// console.log('carousel.cellWidth: ', carousel.cellWidth);
 
 		changeCarousel();
+	};
+
+	const adjustStyles = (
+		props: NodeListOf<Element>,
+		type: 'display' | 'groupName' | 'onHosts',
+	) => {
+		for (let i = 0; i < props.length; i++) {
+			let topData = props[i] as HTMLElement;
+
+			switch (type) {
+				case 'display':
+					if (scene.offsetWidth < 240) {
+						// visible cell
+						topData.style.display = 'none';
+					} else {
+						// hidden cell
+						topData.style.display = 'grid';
+					}
+					break;
+				case 'groupName':
+					const groupNameSize = (8 * scene.offsetWidth) / 100;
+					topData.style.fontSize = `${groupNameSize}px`;
+
+					break;
+				case 'onHosts':
+					const onHostsSize = (20 * scene.offsetWidth) / 100;
+					topData.style.fontSize = `${onHostsSize}px`;
+
+					break;
+			}
+		}
 	};
 
 	onMount(() => {
@@ -182,12 +230,19 @@
 		carouselEl = document.querySelector('.carousel') as HTMLElement;
 		cells = carouselEl && carouselEl.querySelectorAll('.carousel__cell');
 		container = document.querySelector('.container') as HTMLElement;
+		groupName = carouselEl && carouselEl.querySelectorAll('.groupName');
+		onHosts = carouselEl && carouselEl.querySelectorAll('.onHosts');
+		topDatas = carouselEl && carouselEl.querySelectorAll('.topDatas');
 
 		carousel.cellCount = count;
 		carousel.calcContainerSize(container.offsetWidth);
 		carousel.cellWidth = Number((cells[0] as HTMLElement).offsetWidth);
 
 		container.style.height = `${carousel.containerHeight}px`;
+
+		adjustStyles(topDatas, 'display');
+		adjustStyles(groupName, 'groupName');
+		adjustStyles(onHosts, 'onHosts');
 
 		changeCarousel();
 
@@ -217,6 +272,11 @@
 		carousel.calcContainerSize(container.offsetWidth);
 		container.style.height = `${carousel.containerHeight}px`;
 		carousel.cellWidth = Number((cells[0] as HTMLElement).offsetWidth);
+
+		adjustStyles(topDatas, 'display');
+		adjustStyles(groupName, 'groupName');
+		adjustStyles(onHosts, 'onHosts');
+
 		changeCarousel();
 	};
 
@@ -251,19 +311,18 @@
 						<div class="flex h-full flex-col items-center justify-between">
 							<!-- Group Name -->
 							<h2
-								class="w-full text-lg font-semibold lg:text-2xl
+								class="groupName
 			">{item.name}</h2
 							>
 							<!-- On / Total Hosts Number -->
-
-							<p class="font-bold"
-								><span class="text-6xl">{item.countHosts.onHosts}</span>
-								<span class="relative -bottom-2 w-max text-xl"
+							<p class="countHosts"
+								><span class="onHosts">{item.countHosts.onHosts}</span>
+								<span class="relative -bottom-2 w-max text-[125%]"
 									>/ {item.countHosts.totalHosts}</span
 								></p
 							>
 							<!-- Top 5 Datas -->
-							<ul class="grid w-full grid-cols-2 gap-4 px-4 text-sm">
+							<ul class="topDatas">
 								{#each showTopData as topData}
 									<li>
 										<p class="font-semibold">{topData.toUpperCase()}</p>
@@ -278,7 +337,7 @@
 															class="text-rtl inline-block w-2/3 truncate rounded-sm font-medium"
 															>{data.name}</span
 														>
-														<span class="font-semibold">
+														<span class="ml-1 font-semibold">
 															{data.data}
 														</span></p
 													>

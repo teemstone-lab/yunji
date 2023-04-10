@@ -49,7 +49,7 @@
 <div class="mx-auto h-full w-full p-[100px]">
 	{#if groups}
 		<Carousel
-			numberOfCells="{{ min: 5, max: 30 }}"
+			numberOfCells="{{ min: 5, max: count }}"
 			bind:datas="{groups}"
 			showTopData="{['cpu', 'disk']}"
 		/>

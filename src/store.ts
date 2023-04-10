@@ -48,6 +48,7 @@ export type MockGroupType = {
 	topHosts: TopHosts;
 };
 
+export type DataType = 'cpu' | 'mem' | 'swap' | 'disk';
 export type ShowViewerListType = 'on' | 'off' | 'all';
 
 // DateTime

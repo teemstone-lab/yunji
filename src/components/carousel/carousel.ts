@@ -96,9 +96,11 @@ export class Carousel {
 	}
 
 	changeCarousel(index: number) {
-		this.theta = 360 / this.cellCount;
-		this.translateZ = this.calcTranslateZ();
-		this.angle = this.theta * index;
+		if (index >= 0) {
+			this.theta = 360 / this.cellCount;
+			this.translateZ = this.calcTranslateZ();
+			this.angle = this.theta * index;
+		}
 		// 가급적! 무조건! 예외처리 하기
 	}
 

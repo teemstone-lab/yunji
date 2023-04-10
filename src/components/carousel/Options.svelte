@@ -111,12 +111,14 @@
 	const prevNextBtn = (button: Direction) => {
 		if (button === 'next') {
 			carousel.selectedIndex++;
-		}
-		if (button === 'prev') {
+		} else {
 			carousel.selectedIndex--;
 		}
 		rotateCarousel();
-		carouselAnimation();
+
+		if (isStop !== true) {
+			carouselAnimation();
+		}
 	};
 	// #endregion Prev-Next button
 

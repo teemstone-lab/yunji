@@ -1,5 +1,5 @@
 // 웹 워커 스크립트 (hostWorker.ts)
-import type { MockGroupHostType } from '../../store';
+import type { MockGroupHostType, MockGroupType } from '../../store';
 
 export type {};
 
@@ -25,19 +25,12 @@ const countIsOnHosts = (hosts: MockGroupHostType[]) => {
 	return result;
 };
 
-type HostType = {
+type GroupType = {
 	id: string;
-	groupItem: {
-		id: string;
-		name: string;
-		order: number;
-		isOn: boolean;
-		hosts: MockGroupHostType[];
-		countHosts: { onHosts: number; totalHosts: number };
-	};
+	groupItem: MockGroupType;
 };
 
-onmessage = (e: MessageEvent<HostType>) => {
+onmessage = (e: MessageEvent<GroupType>) => {
 	const data = e.data;
 	const groupItem = data.groupItem;
 
@@ -68,7 +61,7 @@ onmessage = (e: MessageEvent<HostType>) => {
 	};
 
 	// EXIST
-	const returnHostList = (existData: HostType) => {
+	const returnHostList = (existData: GroupType) => {
 		for (const item of existData.groupItem.hosts) {
 			item.isOn = numberChecker(Math.random());
 			item.data = {

@@ -1,5 +1,5 @@
 // 웹 워커 스크립트 (groupWorker.ts)
-import type { MockGroupHostType, MockGroupType } from '../../store';
+import type { MockGroupHostType, MockGroupType, TopHosts } from '../../store';
 export type {};
 
 type CreateNewGroups = {
@@ -16,11 +16,7 @@ const random = (min: number, max: number) => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-// const numberChecker = (num: number) => {
-// 	const checkNumSize = Math.round(num) === 1 ? true : false;
-// 	return checkNumSize;
-// };
-
+// 피드백(TODO) : 추후 시스템 코어의 개수를 확인하여, 그것의 절반만큼 워커를 생성할 수 있도록.
 const worker1 = new Worker(new URL('./hostWorker.ts', import.meta.url));
 const worker2 = new Worker(new URL('./hostWorker.ts', import.meta.url));
 const worker3 = new Worker(new URL('./hostWorker.ts', import.meta.url));
@@ -30,42 +26,25 @@ const workers = { worker1, worker2, worker3, worker4 };
 const workersCount = Object.keys(workers).length;
 
 const topDatas = (hosts: MockGroupHostType[]) => {
-	const groupHosts = hosts;
+	const sortByProp = (prop: keyof MockGroupHostType['data']) =>
+		hosts
+			.filter((host) => host.isOn)
+			.sort((a, b) => b.data[prop] - a.data[prop])
+			.slice(0, 5)
+			.map(({ id, name, data }) => ({ id, name, data: data[prop] }));
 
-	const cpu = groupHosts
-		.sort((a, b) => b.data.cpu - a.data.cpu)
-		.filter((host) => host.isOn === true)
-		.map((host) => {
-			return { id: host.id, name: host.name, data: host.data.cpu };
-		})
-		.slice(0, 5);
-
-	const mem = groupHosts
-		.sort((a, b) => b.data.mem - a.data.mem)
-		.filter((host) => host.isOn === true)
-		.map((host) => {
-			return { id: host.id, name: host.name, data: host.data.mem };
-		})
-		.slice(0, 5);
-
-	const swap = groupHosts
-		.sort((a, b) => b.data.swap - a.data.swap)
-		.filter((host) => host.isOn === true)
-		.map((host) => {
-			return { id: host.id, name: host.name, data: host.data.swap };
-		})
-		.slice(0, 5);
-
-	const disk = groupHosts
-		.sort((a, b) => b.data.disk - a.data.disk)
-		.filter((host) => host.isOn === true)
-		.map((host) => {
-			return { id: host.id, name: host.name, data: host.data.disk };
-		})
-		.slice(0, 5);
-
-	return { cpu, mem, swap, disk } as { cpu: []; mem: []; swap: []; disk: [] };
+	return {
+		cpu: sortByProp('cpu'),
+		mem: sortByProp('mem'),
+		swap: sortByProp('swap'),
+		disk: sortByProp('disk'),
+	} as TopHosts;
 };
+
+// const numberChecker = (num: number) => {
+// 	const checkNumSize = Math.round(num) === 1 ? true : false;
+// 	return checkNumSize;
+// };
 
 // 웹 워커에서 메시지 받기
 onmessage = (event: MessageEvent<CreateNewGroups | MockGroupType[]>) => {
@@ -105,7 +84,7 @@ onmessage = (event: MessageEvent<CreateNewGroups | MockGroupType[]>) => {
 			id,
 			name: `group${i + 1}`,
 			order: i,
-			// isOn: isOn ? isOn : numberChecker(Math.random()),
+			// isOn: numberChecker(Math.random()),
 			isOn: true,
 			hosts: [],
 			countHosts: {},
