@@ -25,12 +25,12 @@ const countIsOnHosts = (hosts: MockGroupHostType[]) => {
 	const result = { onHosts: isOnHosts.length, totalHosts: totalHosts.length };
 	return result;
 };
-
+//
 type GroupType = {
 	id: string;
 	groupItem: MockGroupType;
 };
-
+//
 onmessage = (e: MessageEvent<GroupType>) => {
 	const data = e.data;
 	const groupItem = data.groupItem;
