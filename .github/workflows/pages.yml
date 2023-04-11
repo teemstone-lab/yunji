@@ -34,13 +34,4 @@ jobs:
               uses: actions/configure-pages@v2
             - name: Install Modules
               run: npm i
-            - name: Build Pages
               run: npm run build
-            - name: Upload artifact
-              uses: actions/upload-pages-artifact@v1
-              with:
-                  # Upload entire repository
-                  path: './dist'
-            - name: Deploy to GitHub Pages
-              id: deployment
-              uses: actions/deploy-pages@v1
