@@ -1,11 +1,11 @@
+import type { MockGroupHostType, MockGroupType, TopHosts } from './carouselStore';
+
 // 웹 워커 스크립트 (groupWorker.ts)
-import type { MockGroupHostType, MockGroupType, TopHosts } from '../../store';
 export type {};
 
 type CreateNewGroups = {
 	min: number;
 	max: number;
-	groups: MockGroupType[];
 };
 
 let groupMinNum: number;
@@ -17,7 +17,9 @@ const random = (min: number, max: number) => {
 };
 
 // 시스템 코어의 개수를 확인하여, 그것의 절반만큼 워커를 생성.
-const numWorkers = Math.floor(navigator.hardwareConcurrency / 2);
+const numWorkers = Math.floor(navigator.hardwareConcurrency / 2) || 1;
+// 1코어의 경우는 어떻게 되는가? --> 최소값을 1
+// 혹은 올림 함수를 사용할 것.
 const workers = Array(numWorkers).fill(undefined);
 
 for (let i = 0; i < numWorkers; i++) {
@@ -26,6 +28,8 @@ for (let i = 0; i < numWorkers; i++) {
 }
 
 const workersCount = workers.length;
+
+// --------------------------------------------------------------------------
 
 const topDatas = (hosts: MockGroupHostType[]) => {
 	const sortByProp = (prop: keyof MockGroupHostType['data']) =>
@@ -55,8 +59,6 @@ onmessage = (event: MessageEvent<CreateNewGroups | MockGroupType[]>) => {
 	groupMaxNum = newGroup.max;
 	groupCount = random(groupMinNum, groupMaxNum);
 
-	// --------------------------------------------------------------------------
-
 	//#region Sub Worker
 	type GroupType = {
 		id: string;
@@ -82,6 +84,8 @@ onmessage = (event: MessageEvent<CreateNewGroups | MockGroupType[]>) => {
 			workers[i].postMessage({ id, groupItem });
 		} else {
 			workers[targetIndex].postMessage({ id, groupItem });
+			// 해당 부분도 통신 비용. (최소 비용을 염두에 둘 것)
+			// 이 부분도 그룹 아이템을 다 만들어서 한번만 postMessage 하는 방향으로.(워커 하나하나 지정 안해도 되지 않을까?)
 		}
 	}
 	//#endregion Sub Worker

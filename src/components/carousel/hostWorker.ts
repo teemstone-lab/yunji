@@ -1,18 +1,19 @@
 // 웹 워커 스크립트 (hostWorker.ts)
-import type { MockGroupHostType, MockGroupType } from '../../store';
+
+import type { MockGroupHostType, MockGroupType } from './carouselStore';
 
 export type {};
 
-const randomNumber = (num: number) => {
+const randomDataNumber = (num: number) => {
 	const checkNumSize = Math.floor(num * 100);
 	return checkNumSize;
 };
 
-const random = (min: number, max: number) => {
+const randomHostsLimit = (min: number, max: number) => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const numberChecker = (num: number) => {
+const isOnChecker = (num: number) => {
 	const checkNumSize = Math.round(num) === 1 ? true : false;
 	return checkNumSize;
 };
@@ -42,12 +43,12 @@ onmessage = (e: MessageEvent<GroupType>) => {
 			groupItem.hosts[i] = {
 				id: self.crypto.randomUUID(),
 				name: `${groupItem.name}-${i + 1}`,
-				isOn: isOn ? isOn : numberChecker(Math.random()),
+				isOn: isOn ? isOn : isOnChecker(Math.random()),
 				data: {
-					cpu: randomNumber(Math.random()),
-					mem: randomNumber(Math.random()),
-					swap: randomNumber(Math.random()),
-					disk: randomNumber(Math.random()),
+					cpu: randomDataNumber(Math.random()),
+					mem: randomDataNumber(Math.random()),
+					swap: randomDataNumber(Math.random()),
+					disk: randomDataNumber(Math.random()),
 				},
 			};
 		}
@@ -63,12 +64,12 @@ onmessage = (e: MessageEvent<GroupType>) => {
 	// EXIST
 	const returnHostList = (existData: GroupType) => {
 		for (const item of existData.groupItem.hosts) {
-			item.isOn = numberChecker(Math.random());
+			item.isOn = isOnChecker(Math.random());
 			item.data = {
-				cpu: randomNumber(Math.random()),
-				mem: randomNumber(Math.random()),
-				swap: randomNumber(Math.random()),
-				disk: randomNumber(Math.random()),
+				cpu: randomDataNumber(Math.random()),
+				mem: randomDataNumber(Math.random()),
+				swap: randomDataNumber(Math.random()),
+				disk: randomDataNumber(Math.random()),
 			};
 		}
 		groupItem.countHosts = countIsOnHosts(groupItem.hosts);
@@ -79,7 +80,7 @@ onmessage = (e: MessageEvent<GroupType>) => {
 		if (groupItem.hosts.length > 0) {
 			returnHostList(data);
 		} else {
-			mockHostsCreator(random(50, 100), false);
+			mockHostsCreator(randomHostsLimit(50, 100), false);
 		}
 		postMessage(data);
 	}, 1000);

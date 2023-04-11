@@ -9,7 +9,7 @@
 
 	const NavItems = [
 		// 'workerAnimation',
-		'carouselAnimation',
+		'carouselCallWorker',
 		'onTuneViewer',
 		'webWorker',
 		'calculator',
