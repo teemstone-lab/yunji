@@ -12,6 +12,11 @@ let groupMinNum: number;
 let groupMaxNum: number;
 let groupCount: number;
 
+/**
+ * @param {number} min 최소값
+ * @param {number} max 최대값
+ * @return {number} min 과 max 사이의 랜덤한 정수
+ */
 const random = (min: number, max: number) => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
@@ -31,6 +36,11 @@ const workersCount = workers.length;
 
 // --------------------------------------------------------------------------
 
+/**
+ * cpu, mem, swap, disk 각각의 데이터 중,
+ * 가장 높은 TOP5 데이터들을 구하는 함수
+ * @param {MockGroupHostType[]} hosts 호스트들
+ */
 const topDatas = (hosts: MockGroupHostType[]) => {
 	const sortByProp = (prop: keyof MockGroupHostType['data']) =>
 		hosts
