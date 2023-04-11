@@ -5,7 +5,7 @@
 	import OnTuneViewer from './pages/onTuneViewer.svelte';
 	import Nav from './components/nav/Nav.svelte';
 	import Calculator from './components/calculator/Calculator.svelte';
-	import CarouselAnimation from './pages/carouselAnimation.svelte';
+	import CarouselCallWorker from './pages/carouselCallWorker.svelte';
 
 	type ClickEvent = MouseEvent & {
 		currentTarget: EventTarget & HTMLButtonElement;
@@ -23,8 +23,8 @@
 		<div class="px-4">
 			<Index />
 		</div>
-	{:else if currentPage === 'carouselAnimation'}
-		<CarouselAnimation />
+	{:else if currentPage === 'carouselCallWorker'}
+		<CarouselCallWorker />
 	{:else if currentPage === 'onTuneViewer'}
 		<OnTuneViewer />
 	{:else if currentPage === 'webWorker'}
@@ -32,4 +32,5 @@
 	{:else if currentPage === 'calculator'}
 		<Calculator />
 	{/if}
+	<!-- 일반 else 의 경우도  -->
 </main>

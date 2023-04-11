@@ -91,7 +91,6 @@
 		onOrientationChange: (radioValue: CellViewType) => void;
 		carouselAnimation: () => void;
 		animationStart: () => void;
-		// newCreateCount: () => void;
 	};
 	const {
 		numberOfCells,
@@ -100,7 +99,6 @@
 		onOrientationChange,
 		carouselAnimation,
 		animationStart,
-		// newCreateCount,
 	} = props;
 
 	let isActive: boolean = true;

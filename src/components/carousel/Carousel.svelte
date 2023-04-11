@@ -98,7 +98,7 @@
 	import { Carousel, CellViewType, Vertical } from './carousel';
 	import { onMount } from 'svelte';
 	import Options from './Options.svelte';
-	import type { DataType, MockGroupType } from 'src/store';
+	import type { DataType, MockGroupType } from './carouselStore';
 	export let numberOfCells: { min: number; max: number };
 	export let datas: MockGroupType[];
 	export let showTopData: Array<DataType>;
@@ -113,6 +113,7 @@
 	let groupName: NodeListOf<Element>;
 	let onHosts: NodeListOf<Element>;
 	let topDatas: NodeListOf<Element>;
+	let showTopDataNum: number = 5;
 
 	let container: HTMLElement;
 
@@ -187,11 +188,17 @@
 			scene.style.width = `75%`;
 			scene.style.height = `30%`;
 			carousel.cellWidth = Number((cells[0] as HTMLElement).offsetWidth);
+
+			if (scene.offsetHeight < 320) {
+				showTopDataNum = 3;
+			}
 		} else {
 			container.style.width = `100%`;
 			scene.style.width = `30%`;
 			scene.style.height = `75%`;
 			carousel.cellWidth = Number((cells[0] as HTMLElement).offsetWidth);
+
+			showTopDataNum = 5;
 		}
 		// console.log('cellWidth: ', cellWidth);
 		carousel.cellWidth = cellWidth;
@@ -298,7 +305,6 @@
 		onOrientationChange,
 		carouselAnimation,
 		animationStart,
-		// newCreateCount,
 	};
 </script>
 
@@ -338,26 +344,30 @@
 									<li>
 										<p class="font-semibold">{topData.toUpperCase()}</p>
 										<ol class="space-y-1">
-											{#each Object(item.topHosts)[topData] as data (data.id)}
-												<li
-													class="relative overflow-hidden rounded bg-black bg-opacity-30"
-												>
-													<p
-														class="relative z-[1] flex w-full items-center justify-between rounded border border-white px-1 text-black"
-														><span
-															class="text-rtl inline-block w-2/3 truncate rounded-sm font-medium"
-															>{data.name}</span
-														>
-														<span class="ml-1 font-semibold">
-															{data.data}
-														</span></p
+											{#each Object(item.topHosts)[topData] as data, index (data.id)}
+												{#if index < showTopDataNum}
+													<li
+														class="relative overflow-hidden rounded bg-black bg-opacity-30"
 													>
+														<p
+															class="relative z-[1] flex w-full items-center justify-between rounded border border-white px-1 text-black"
+														>
+															<span
+																class="text-rtl inline-block w-2/3 truncate rounded-sm font-medium"
+																>{data.name}</span
+															>
+															<span class="ml-1 font-semibold">
+																{data.data}
+															</span></p
+														>
 
-													<div
-														class="absolute -inset-1 inline-block bg-white bg-opacity-50 "
-														style="{`width: ${Number(data.data)}%;`}"
-													></div>
-												</li>
+														<div
+															class="absolute -inset-1 inline-block bg-white bg-opacity-50 "
+															style="{`width: ${Number(
+																data.data,
+															)}%;`}"></div>
+													</li>
+												{/if}
 											{/each}
 										</ol>
 									</li>

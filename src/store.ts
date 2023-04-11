@@ -6,49 +6,6 @@ export type EventData = {
 	elapsedTime: number;
 };
 
-export type MockHostType = {
-	name: number;
-	isOn: boolean;
-};
-
-export type NewHostType = {
-	id?: Array<string>;
-	groupName: string;
-	limit: number;
-	isAllTrue: boolean;
-};
-
-export type MockGroupHostType = {
-	id: string;
-	name: string;
-	isOn: boolean;
-	data: {
-		cpu: number;
-		mem: number;
-		swap: number;
-		disk: number;
-	};
-};
-
-type TopHost = { id: string; name: string; isOn: boolean; data: number };
-export type TopHosts = {
-	cpu: TopHost[];
-	mem: TopHost[];
-	swap: TopHost[];
-	disk: TopHost[];
-};
-
-export type MockGroupType = {
-	id: string;
-	name: string;
-	order: number;
-	isOn: boolean;
-	hosts: MockGroupHostType[];
-	countHosts: { onHosts: number; totalHosts: number };
-	topHosts: TopHosts;
-};
-
-export type DataType = 'cpu' | 'mem' | 'swap' | 'disk';
 export type ShowViewerListType = 'on' | 'off' | 'all';
 
 // DateTime

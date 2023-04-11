@@ -73,7 +73,7 @@ export class Carousel {
 
 	private calcTranslateZ(isNegative?: boolean) {
 		const result =
-			Math.round(this.cellWidth / 2 / Math.tan(Math.PI / this.cellCount)) + this.theta;
+			Math.round(this.cellWidth / 2 / Math.tan(Math.PI / (this.cellCount || 1))) + this.theta;
 
 		return isNegative ? result * -1 : result;
 
@@ -97,7 +97,7 @@ export class Carousel {
 
 	changeCarousel(index: number) {
 		if (index >= 0) {
-			this.theta = 360 / this.cellCount;
+			this.theta = 360 / (this.cellCount || 1);
 			this.translateZ = this.calcTranslateZ();
 			this.angle = this.theta * index;
 		}
