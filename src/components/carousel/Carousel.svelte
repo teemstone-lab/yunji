@@ -308,6 +308,22 @@
 	};
 </script>
 
+<!--
+@component
+@param numberOfCells
+@param datas
+@param showTopData
+
+- Usage:
+  ```tsx
+  <Carousel 
+		numberOfCells="{{ min: 5, max: 20 }}"  
+		bind:datas="{datas}"  
+		showTopData="{['cpu', 'mem']}"
+	/>
+	```
+-->
+
 <svelte:window
 	on:resize="{() => {
 		debounce(resizingContainer, 1000)();

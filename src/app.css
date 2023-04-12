@@ -6,6 +6,19 @@
 	padding: 0;
 }
 
+.customScrollbar::-webkit-scrollbar {
+	width: 8px;
+}
+.customScrollbar::-webkit-scrollbar-track {
+	background: #e8e8e8;
+	border-radius: 5px;
+}
+.customScrollbar::-webkit-scrollbar-thumb {
+	background-color: #c6c6c6;
+	border-radius: 14px;
+	border: 1px solid #e8e8e8;
+}
+
 html,
 body,
 #app {

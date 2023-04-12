@@ -6,6 +6,7 @@
 	import Nav from './components/nav/Nav.svelte';
 	import Calculator from './components/calculator/Calculator.svelte';
 	import CarouselCallWorker from './pages/carouselCallWorker.svelte';
+	import TodoList from './pages/todoList.svelte';
 
 	type ClickEvent = MouseEvent & {
 		currentTarget: EventTarget & HTMLButtonElement;
@@ -23,6 +24,8 @@
 		<div class="px-4">
 			<Index />
 		</div>
+	{:else if currentPage === 'todoList'}
+		<TodoList />
 	{:else if currentPage === 'carouselCallWorker'}
 		<CarouselCallWorker />
 	{:else if currentPage === 'onTuneViewer'}
