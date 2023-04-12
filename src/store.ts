@@ -1,9 +1,30 @@
 import { writable } from 'svelte/store';
 export const dark = writable(false);
 
+export const NavItems = [
+	'todoList',
+	'carouselCallWorker',
+	'onTuneViewer',
+	'webWorker',
+	'calculator',
+];
+
+enum ButtonType {
+	Save = 'Save',
+	Edit = 'Edit',
+	Delete = 'Delete',
+	Cancel = 'Cancel',
+}
+export const { Save, Edit, Delete, Cancel } = ButtonType;
+
 export type EventData = {
 	result: number;
 	elapsedTime: number;
+};
+
+export type MockHostType = {
+	name: number;
+	isOn: boolean;
 };
 
 export type ShowViewerListType = 'on' | 'off' | 'all';

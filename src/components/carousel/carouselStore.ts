@@ -1,8 +1,3 @@
-export type MockHostType = {
-	name: number;
-	isOn: boolean;
-};
-
 export type NewHostType = {
 	id?: Array<string>;
 	groupName: string;
