@@ -1,6 +1,6 @@
 <script lang="ts">
-	export let width: string = 'w-6';
-	export let height: string = 'h-6';
+	export let width: number = 20;
+	export let height: number = 20;
 </script>
 
 <svg
@@ -9,7 +9,8 @@
 	viewBox="0 0 24 24"
 	stroke-width="1.5"
 	stroke="currentColor"
-	class="{(width, height)}"
+	width="{width}"
+	height="{height}"
 >
 	<path
 		stroke-linecap="round"
