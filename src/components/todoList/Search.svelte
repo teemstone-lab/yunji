@@ -37,7 +37,14 @@
 </script>
 
 <div class="relative">
-	<Search size="md" on:keyup="{searchTodo}" bind:value="{searchKeyword}" disabled="{isEdit}">
+	<Search
+		size="md"
+		on:keyup="{searchTodo}"
+		bind:value="{searchKeyword}"
+		disabled="{isEdit}"
+		maxLength="{30}"
+		class="pr-10"
+	>
 		{#if searchKeyword && searchKeyword.length > 0}
 			<Button
 				class="border-0 !bg-transparent !px-1 text-gray-600 transition-all hover:text-gray-800 focus:outline-0 focus:ring-transparent"
