@@ -1,87 +1,126 @@
 <script lang="ts">
-	import { Delete, Edit } from '../../store';
-	import Button from '../common/Button.svelte';
+	import { Button, Spinner } from 'flowbite-svelte';
+	import type { TodoListItemType } from './todoListStore';
+	import Search from './Search.svelte';
+	import TodoList from './TodoList.svelte';
+	import { IconPlus } from '../../icons/icons';
+	import Modal from '../common/Modal.svelte';
 
-	// import Button from '../button/Button.svelte';
-	import type { TodoList } from './todoListStore';
+	export let showAlert: boolean;
 
-	export let todos: TodoList[];
-	export let todo: TodoList;
+	let title: string = '';
+	let todos: Array<TodoListItemType> = [];
+	let filterdTodos: Array<TodoListItemType> = [];
+	let todoLists: Array<TodoListItemType>;
 
-	export let isEdit: boolean;
+	let isEdit: string | undefined = undefined;
+	let isSearch: boolean = false;
+	let isNewItem: boolean = false;
+	let isLoading: boolean = false;
 
-	let editedTitle: string = todo.title;
+	let deletedItem: string | undefined;
+	let isOpen = deletedItem ? true : false;
 
-	const saveTodo = () => {
-		todo.title = editedTitle;
-		isEdit = !isEdit;
-	};
+	let searchKeyword: string = '';
 
-	const deleteTodo = (id: string) => {
-		todos = todos.filter((t) => t.id !== id);
-	};
+	const updateTodoList = () => {
+		if (isSearch) {
+			const newItem = todos.slice(-1);
 
-	const cancelTodo = (id: string) => {
-		if (todo.title.trim() === '') {
-			deleteTodo(id);
+			filterdTodos = todos.filter((t) =>
+				t.title.replaceAll(' ', '').includes(searchKeyword.replaceAll(' ', '')),
+			);
+			todoLists = isNewItem
+				? ([...filterdTodos, newItem[0]] as TodoListItemType[])
+				: filterdTodos;
 		} else {
-			editedTitle = todo.title;
+			todoLists = todos;
 		}
-		isEdit = !isEdit;
 	};
 
-	const keyPressFunc = (key: string) => {
-		switch (key) {
-			case 'Enter':
-				saveTodo();
-				break;
-			case 'Escape':
-				cancelTodo(todo.id);
-				break;
+	const createTodo = () => {
+		const id = String(self.crypto.randomUUID());
+		todos.push({
+			id,
+			title,
+			isDone: false,
+		});
+
+		isNewItem = true;
+		isEdit = id;
+
+		updateTodoList();
+
+		title = '';
+	};
+
+	const showAlertMessage = () => {
+		setTimeout(() => {
+			showAlert = false;
+			isOpen = false;
+		}, 3000);
+	};
+
+	const deleteTodo = (id: string, alert?: boolean) => {
+		if (alert) {
+			isOpen = true;
+			deletedItem = id;
+		} else {
+			deletedItem = undefined;
+			todos = todos.filter((t) => t.id !== id);
+			updateTodoList();
 		}
 	};
 </script>
 
-<li class="flex h-12 items-center justify-between gap-x-4 rounded-lg bg-white px-4">
-	<div class="flex h-full w-full items-center gap-x-2 hover:cursor-pointer">
-		<input
-			id="{todo.id}"
-			type="checkbox"
-			bind:value="{todo.title}"
-			class="h-4 w-4 flex-shrink-0 hover:cursor-pointer"
-			disabled="{isEdit}"
-		/>
-		{#if isEdit}
-			<input
-				bind:value="{editedTitle}"
-				on:keydown="{(e) => keyPressFunc(String(e.key))}"
-				autofocus="{isEdit}"
-				class="h-[60%] w-full border-b-2 border-indigo-600 focus:outline-0"
-			/>
-		{:else}
-			<label
-				for="{todo.id}"
-				class="inline-flex h-full w-full select-none items-center hover:cursor-pointer"
-				>{todo.title}</label
-			>
-		{/if}
+<div
+	class="relative flex h-[540px] w-full flex-col space-y-4 rounded-xl bg-gray-100 p-4 text-gray-700 shadow-xl shadow-gray-200 md:w-[400px]"
+>
+	<Search
+		updateTodoList="{updateTodoList}"
+		bind:searchKeyword="{searchKeyword}"
+		bind:isSearch="{isSearch}"
+		bind:isEdit="{isEdit}"
+		bind:isLoading="{isLoading}"
+	/>
+
+	{#if isLoading}
+		<div class="absolute inset-0 flex h-full w-full items-center justify-center">
+			<Button color="alternative">
+				<Spinner class="mr-3" size="5" />Loading ...
+			</Button>
+		</div>
+	{/if}
+
+	<TodoList
+		bind:todoLists="{todoLists}"
+		deleteTodo="{deleteTodo}"
+		bind:isEdit="{isEdit}"
+		bind:isNewItem="{isNewItem}"
+	/>
+
+	<div class="absolute inset-x-0 bottom-0 z-10 py-4 text-center">
+		<button
+			title="Add button"
+			type="button"
+			on:click="{() => !isNewItem && createTodo()}"
+			class="inline-flex h-16 w-16 items-center justify-center rounded-full bg-indigo-500 p-4 text-white shadow-lg shadow-gray-300 transition-all duration-100 hover:bg-indigo-700"
+			><IconPlus width="{24}" height="{24}" strokeWidth="{2.5}" />
+		</button>
 	</div>
-	<div class="flex flex-shrink-0">
-		{#if isEdit}
-			<button on:click="{saveTodo}">Save</button>
-			<button on:click="{() => cancelTodo(todo.id)}">Cancel</button>
-		{:else}
-			<!-- <button on:click="{() => (isEdit = !isEdit)}">Edit</button> -->
-			<!-- <button on:click="{() => deleteTodo(todo.id)}">Delete</button> -->
-			<!-- <Button text="Edit" color="#00f" onClickF="{() => (isEdit = !isEdit)}" />
-			<Button text="Delete" color="#f00" onClickF="{() => deleteTodo(todo.id)}" /> -->
-			<Button title="Edit" btnType="{Edit}" isIcon onClickF="{() => (isEdit = !isEdit)}" />
-			<Button
-				title="Delete"
-				btnType="{Delete}"
-				isIcon
-				onClickF="{() => deleteTodo(todo.id)}"
-			/>
-		{/if}
-	</div>
-</li>
+</div>
+
+<Modal bind:isOpen="{isOpen}" message="Are you sure you want to delete this todo item?">
+	<Button
+		color="red"
+		on:click="{() => {
+			if (deletedItem) {
+				deleteTodo(deletedItem);
+
+				showAlert = true;
+				showAlertMessage();
+			}
+		}}">Delete</Button
+	>
+	<Button color="light" on:click="{() => (deletedItem = undefined)}">Cancel</Button>
+</Modal>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { IconTrash, IconPencil } from '../../icons/icons';
+	import { IconTrash, IconPencil, IconCheck, IconXMark } from '../../icons/icons';
 
 	enum ButtonType {
 		Save = 'Save',
@@ -35,8 +35,6 @@
 		: `${icon()} border border-dark-900 text-white`;
 </script>
 
-<!-- <IconTrash /> -->
-
 <button
 	on:click="{() => {
 		if (onClickF) {
@@ -48,10 +46,14 @@
 	} ${isIconStyle} rounded-lg px-2 py-2 transition-all`}"
 >
 	{#if isIcon}
-		{#if btnType === Edit}
-			<IconPencil />
+		{#if btnType === Save}
+			<IconCheck width="{18}" height="{18}" />
+		{:else if btnType === Edit}
+			<IconPencil width="{18}" height="{18}" />
 		{:else if btnType === Delete}
-			<IconTrash />
+			<IconTrash width="{18}" height="{18}" />
+		{:else if btnType === Cancel}
+			<IconXMark width="{18}" height="{18}" />
 		{/if}
 	{:else}
 		{title}
