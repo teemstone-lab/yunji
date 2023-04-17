@@ -1,4 +1,5 @@
-export type TodoList = {
+export type TodoListItemType = {
 	id: string;
 	title: string;
+	isDone: boolean;
 };
