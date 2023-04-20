@@ -7,7 +7,7 @@
 </script>
 
 <Layout title="Fruit Shop">
-	<div class="grid h-60 w-full gap-5 md:grid-cols-3">
+	<div class="grid w-full gap-5 md:grid-cols-3">
 		{#each $shops as shop, index (shop.id)}
 			<Shop
 				bind:shop="{shop}"
@@ -24,8 +24,7 @@
 	<ul class="grid grid-cols-6 gap-2 py-5">
 		{#each $fruits as fruit, index (fruit.id)}
 			<Fruit
-				name="{fruit.name}"
-				icon="{fruit.icon}"
+				fruit="{fruit}"
 				on:dragstart="{(event) => fruits.dragStart(event, index, String(fruit.id), null)}"
 			/>
 		{/each}
