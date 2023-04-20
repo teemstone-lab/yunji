@@ -65,7 +65,7 @@ const shopsData = writable<Shop[]>(
 		{ id: uuid(), name: '온튠 청과', fruits: [], isHovering: false, color: '#F7D6A2' },
 		{
 			id: uuid(),
-			name: '민혁 사기꾼 청과',
+			name: '👻민혁 사기꾼 청과',
 			fruits: [],
 			isHovering: false,
 			color: '#97D6F1',
@@ -96,7 +96,6 @@ export const fruits = {
 	setItem: (addFruit: Fruit) => {
 		fruitsData.update(($fruitsData) => {
 			$fruitsData.push(addFruit);
-			$fruitsData = $fruitsData;
 
 			return $fruitsData;
 		});
@@ -111,14 +110,11 @@ export const fruits = {
 			shopsData.update(($shopsData) => {
 				$shopsData[shopIndex].fruits.splice(fruitIndex, 1);
 
-				$shopsData = $shopsData;
-
 				return $shopsData;
 			});
 		} else {
 			fruitsData.update(($fruitsData) => {
 				$fruitsData.splice(fruitIndex, 1);
-				$fruitsData = $fruitsData;
 
 				return $fruitsData;
 			});
@@ -233,16 +229,13 @@ export const shops = {
 					? true
 					: false;
 
-				if (!isDuplicate) {
-					if (data.shopIndex !== null) {
-						const [item] = $shopsData[data.shopIndex].fruits.splice(data.fruitIndex, 1);
-						$shopsData[shopIndex].fruits.push(item);
-					} else {
-						const item = get(fruitsData)[data.fruitIndex];
+				if (!isDuplicate && data.shopIndex !== null) {
+					const [item] = $shopsData[data.shopIndex].fruits.splice(data.fruitIndex, 1);
+					$shopsData[shopIndex].fruits.push(item);
+				} else if (!isDuplicate && data.shopIndex === null) {
+					const item = get(fruitsData)[data.fruitIndex];
 
-						$shopsData[shopIndex].fruits.push(item);
-					}
-					$shopsData = $shopsData;
+					$shopsData[shopIndex].fruits.push(item);
 				}
 
 				return $shopsData;
