@@ -26,6 +26,7 @@
 			<Fruit
 				fruit="{fruit}"
 				on:dragstart="{(event) => fruits.dragStart(event, index, String(fruit.id), null)}"
+				on:click="{() => fruits.deleteItem(index, null)}"
 			/>
 		{/each}
 	</ul>
