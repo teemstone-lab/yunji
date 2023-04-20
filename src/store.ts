@@ -2,6 +2,7 @@ import { writable } from 'svelte/store';
 export const dark = writable(false);
 
 export const NavItems = [
+	'fruitShop',
 	'todoList',
 	'carouselCallWorker',
 	'onTuneViewer',
