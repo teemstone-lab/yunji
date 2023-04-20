@@ -7,7 +7,7 @@
 	import Calculator from './components/calculator/Calculator.svelte';
 	import CarouselCallWorker from './pages/carouselCallWorker.svelte';
 	import TodoList from './pages/todoList.svelte';
-	import FruitShop from './pages/fruitShop.svelte';
+	import FruitShop from './pages/fruitsShop.svelte';
 
 	type ClickEvent = MouseEvent & {
 		currentTarget: EventTarget & HTMLButtonElement;
