@@ -1,3 +1,4 @@
+import IconArrowPath from './IconArrowPath.svelte';
 import IconCheck from './IconCheck.svelte';
 import IconFaceFrown from './IconFaceFrown.svelte';
 import IconInfomation from './IconInfomation.svelte';
@@ -9,6 +10,7 @@ import IconTrash from './IconTrash.svelte';
 import IconXMark from './IconXMark.svelte';
 
 export {
+	IconArrowPath,
 	IconCheck,
 	IconFaceFrown,
 	IconInfomation,
