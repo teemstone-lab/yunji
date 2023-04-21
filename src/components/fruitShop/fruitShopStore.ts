@@ -88,7 +88,7 @@ const shopsData = writable<Shop[]>(
 // #region frutis Custom store
 export const fruits = {
 	...fruitsData,
-	getIsHoveringItem: () => get(fruitsData).find(($fruitsData) => $fruitsData.isHovering),
+	getIsFloatingItem: () => get(fruitsData).find(($fruitsData) => $fruitsData.isHovering),
 	/**
 	 * 새 아이템 추가
 	 * @param {Fruit} addFruit 새로 추가할 아이템
@@ -181,7 +181,7 @@ export const shops = {
 
 			if (thisShop) {
 				const isDuplicate = thisShop.fruits.find(
-					(fruit) => fruit.id === fruits.getIsHoveringItem()?.id,
+					(fruit) => fruit.id === fruits.getIsFloatingItem()?.id,
 				)
 					? true
 					: false;
