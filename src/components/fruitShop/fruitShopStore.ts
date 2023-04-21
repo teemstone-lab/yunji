@@ -210,6 +210,32 @@ export const shops = {
 		});
 	},
 	/**
+	 * fruit 아이템을 가게에 모두 추가
+	 * @param {string} id 가게의 고유 Id
+	 */
+	allAddItems: (id: string) => {
+		shopsData.update(($shopsData) => {
+			const thisShop = $shopsData.find((data) => data.id === id);
+
+			if (thisShop) thisShop.fruits = get(fruitsData);
+
+			return $shopsData;
+		});
+	},
+	/**
+	 * 가게의 모든 아이템 삭제
+	 * @param {string} id 가게의 고유 Id
+	 */
+	allDeleteItems: (id: string) => {
+		shopsData.update(($shopsData) => {
+			const thisShop = $shopsData.find((data) => data.id === id);
+
+			if (thisShop) thisShop.fruits = [];
+
+			return $shopsData;
+		});
+	},
+	/**
 	 * 가게 영역에 아이템 Drop
 	 * @param {any} e DragEvent
 	 * @param {number} shopIndex 아이템이 drop 된 가게의 index

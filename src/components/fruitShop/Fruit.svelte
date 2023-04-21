@@ -7,7 +7,7 @@
 
 <li
 	title="{fruit.name}"
-	class="relative flex h-16 w-16 items-center justify-center text-4xl transition-all duration-500 hover:cursor-move {isShowDeleteBtn
+	class="relative flex h-16 w-full min-w-[4rem] items-center justify-center text-4xl transition-all duration-500 hover:cursor-move {isShowDeleteBtn
 		? 'bg-gray-200'
 		: 'bg-transparent'}"
 	draggable="{true}"
