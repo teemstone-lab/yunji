@@ -6,7 +6,7 @@
 	import AddNewFruit from '../components/fruitShop/AddNewFruit.svelte';
 </script>
 
-<Layout title="Fruit Shop">
+<Layout title="Fruit Shop" selectNone="{true}">
 	<div class="grid w-full gap-5 md:grid-cols-3">
 		{#each $shops as shop, index (shop.id)}
 			<Shop

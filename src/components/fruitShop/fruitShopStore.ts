@@ -88,7 +88,7 @@ const shopsData = writable<Shop[]>(
 // #region frutis Custom store
 export const fruits = {
 	...fruitsData,
-	getIsHoveringItem: () => get(fruitsData).find(($fruitsData) => $fruitsData.isHovering),
+	getIsFloatingItem: () => get(fruitsData).find(($fruitsData) => $fruitsData.isHovering),
 	/**
 	 * 새 아이템 추가
 	 * @param {Fruit} addFruit 새로 추가할 아이템
@@ -181,7 +181,7 @@ export const shops = {
 
 			if (thisShop) {
 				const isDuplicate = thisShop.fruits.find(
-					(fruit) => fruit.id === fruits.getIsHoveringItem()?.id,
+					(fruit) => fruit.id === fruits.getIsFloatingItem()?.id,
 				)
 					? true
 					: false;
@@ -206,6 +206,32 @@ export const shops = {
 		shopsData.update(($shopsData) => {
 			const thisShop = $shopsData.find((data) => data.id === id);
 			thisShop?.fruits.push(fruit);
+			return $shopsData;
+		});
+	},
+	/**
+	 * fruit 아이템을 가게에 모두 추가
+	 * @param {string} id 가게의 고유 Id
+	 */
+	allAddItems: (id: string) => {
+		shopsData.update(($shopsData) => {
+			const thisShop = $shopsData.find((data) => data.id === id);
+
+			if (thisShop) thisShop.fruits = get(fruitsData);
+
+			return $shopsData;
+		});
+	},
+	/**
+	 * 가게의 모든 아이템 삭제
+	 * @param {string} id 가게의 고유 Id
+	 */
+	allDeleteItems: (id: string) => {
+		shopsData.update(($shopsData) => {
+			const thisShop = $shopsData.find((data) => data.id === id);
+
+			if (thisShop) thisShop.fruits = [];
+
 			return $shopsData;
 		});
 	},
