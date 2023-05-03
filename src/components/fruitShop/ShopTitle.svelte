@@ -8,6 +8,10 @@
 
 	const titleEditBtnStyle =
 		'absolute inset-y-0 right-0 flex h-full w-10 items-center justify-center opacity-30 transition-all hover:opacity-100';
+
+	const inputElementOnFocus = (el: HTMLInputElement) => {
+		el.focus();
+	};
 </script>
 
 <h3
@@ -18,6 +22,7 @@
 >
 	{#if isEditMode}
 		<input
+			use:inputElementOnFocus
 			on:keydown="{(e) => (e.key === 'Enter' ? (isEditMode = false) : true)}"
 			bind:value="{shop.name}"
 			maxlength="15"
