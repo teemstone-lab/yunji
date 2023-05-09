@@ -1,5 +1,5 @@
 <script lang="ts">
-	let currentPage = 'index';
+	import Router from 'svelte-spa-router';
 	import Index from './pages/index.svelte';
 	import WebWorker from './pages/webWorker.svelte';
 	import OnTuneViewer from './pages/onTuneViewer.svelte';
@@ -9,19 +9,23 @@
 	import TodoList from './pages/todoList.svelte';
 	import FruitShop from './pages/fruitsShop.svelte';
 
-	type ClickEvent = MouseEvent & {
-		currentTarget: EventTarget & HTMLButtonElement;
-	};
-	const clickHandler = (e: ClickEvent) => {
-		const target = e.target as HTMLButtonElement;
-		currentPage = target.innerText;
+	const routes = {
+		'/': Index,
+
+		'/fruitShop': FruitShop,
+		'/todoList': TodoList,
+		'/carouselCallWorker': CarouselCallWorker,
+		'/onTuneViewer': OnTuneViewer,
+		'/webWorker': WebWorker,
+		'/calculator': Calculator,
 	};
 </script>
 
-<Nav clickHandler="{clickHandler}" />
+<Nav />
 
 <main>
-	{#if currentPage === 'index'}
+	<Router routes="{routes}" />
+	<!-- {#if currentPage === 'index'}
 		<div class="px-4">
 			<Index />
 		</div>
@@ -37,6 +41,5 @@
 		<WebWorker />
 	{:else if currentPage === 'calculator'}
 		<Calculator />
-	{/if}
-	<!-- 일반 else 의 경우도  -->
+	{/if} -->
 </main>
