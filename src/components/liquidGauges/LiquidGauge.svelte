@@ -23,8 +23,11 @@
 >
 	<ul class="relative z-[1]">
 		<li>{viewOption}</li>
-		<li class="text-3xl font-semibold brightness-75" style="color: {color(selectedData)};">
-			{selectedData}
+		<li
+			class="indent-2 text-3xl font-semibold brightness-75"
+			style="color: {color(selectedData)};"
+		>
+			{selectedData}<small class="text-sm">%</small>
 		</li>
 	</ul>
 

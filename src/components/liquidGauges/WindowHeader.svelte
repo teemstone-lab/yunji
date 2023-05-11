@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { HostDataType, customMockHosts } from './liquidGaugesViewStroe';
+	import { HostDataType, customMockHosts, windows } from './liquidGaugesViewStroe';
 	import { IconCog8Tooth } from '../../icons/icons';
 
 	export let host: HostDataType;
 	export let viewOptions: Array<keyof HostDataType['data']>;
+	export let index: number;
 
 	let openOptions: boolean = false;
 	let openHosts: boolean = false;
@@ -25,6 +26,10 @@
 		}
 		openOptions = false;
 	};
+
+	const changeHost = (selectedHost: any) => {
+		$windows[index] = selectedHost as HostDataType;
+	};
 </script>
 
 <div
@@ -45,13 +50,14 @@
 	>
 	{#if openHosts}
 		<ul
-			class="customScrollbar absolute left-0 top-10 z-[2] overflow-y-auto rounded-lg border bg-white shadow-lg"
+			class="customScrollbar absolute left-0 top-10 z-[2] max-h-40 w-1/2 overflow-y-auto rounded-lg border bg-white shadow-lg"
 		>
 			{#each $customMockHosts as mockHost (mockHost.id)}
 				<li class="w-full"
 					><button
 						class=" w-full py-2 px-3 text-left text-sm hover:bg-gray-100 disabled:text-gray-300"
-						disabled="{mockHost.id === host.id}">{mockHost.name}</button
+						disabled="{mockHost.id === host.id}"
+						on:click="{() => changeHost(mockHost)}">{mockHost.name}</button
 					></li
 				>
 			{/each}

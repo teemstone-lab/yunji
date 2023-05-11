@@ -1,16 +1,19 @@
-import { worker } from '../../mocks/worker';
+import type { HostDataType } from './liquidGaugesViewStroe';
 
 onmessage = function (event: MessageEvent) {
-	console.log(event.data);
+	let isUpdating: boolean = false;
 
-	// 여기에서 MSW 에 요청을 보내야...
-
-	if (process.env.NODE_ENV === 'development') {
-		worker.start().catch((error) => console.error(error));
-
-		fetch('/hosts')
+	const callMsw = () => {
+		fetch(isUpdating ? '/hosts/data' : '/hosts')
 			.then((response) => response.json())
-			.then((data) => postMessage(data))
+			.then((data) => postMessage(data as HostDataType[]))
 			.catch((error) => console.error(error));
-	}
+		if (!isUpdating) isUpdating = true;
+	};
+
+	callMsw();
+
+	setInterval(() => {
+		callMsw();
+	}, 2000);
 };

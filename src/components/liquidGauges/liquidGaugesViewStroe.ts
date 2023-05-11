@@ -12,3 +12,5 @@ export const customMockHosts = {
 	...mockHosts,
 	getshowHosts: (limit: number = 4) => get(mockHosts).slice(0, limit),
 };
+
+export const windows = writable<HostDataType[]>([]);

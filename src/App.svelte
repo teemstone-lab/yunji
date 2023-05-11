@@ -9,6 +9,7 @@
 	import TodoList from './pages/todoList.svelte';
 	import FruitShop from './pages/fruitsShop.svelte';
 	import liquidGaugesView from './pages/liquidGaugesView.svelte';
+	import { worker } from './mocks/worker';
 
 	const routes = {
 		'/': Index,
@@ -21,6 +22,10 @@
 		'/webWorker': WebWorker,
 		'/calculator': Calculator,
 	};
+
+	if (process.env.NODE_ENV === 'development') {
+		worker.start().catch((error) => console.error(error));
+	}
 </script>
 
 <Nav />
