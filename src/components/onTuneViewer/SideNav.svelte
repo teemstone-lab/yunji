@@ -139,6 +139,8 @@
 		off: MockHostType[];
 	};
 
+	export let viewFilterHandler: () => void;
+
 	const btnBundleItems = [
 		[0, 1, 2],
 		[3, 4, 5],
@@ -195,7 +197,7 @@
 									title="{buttonTitle(item)}"
 									class="tree{item}"
 									on:click="{() => showList(item)}"
-									>{item === 0 ? 'ALL' : ''}</button
+									on:click="{viewFilterHandler}">{item === 0 ? 'ALL' : ''}</button
 								>
 							</li>
 						{/each}

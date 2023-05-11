@@ -81,6 +81,8 @@
 		on: MockHostType[];
 		off: MockHostType[];
 	};
+
+	export let viewFilterHandler: () => void;
 </script>
 
 <div class="footer">
@@ -94,6 +96,7 @@
 		type="button"
 		class="allItems"
 		on:click="{() => (showListType = 'all')}"
+		on:click="{viewFilterHandler}"
 	>
 		<p><span class="bottomAll">ALL</span>{list.length}</p>
 	</button>
@@ -102,6 +105,7 @@
 		type="button"
 		class="connectOn"
 		on:click="{() => (showListType = 'on')}"
+		on:click="{viewFilterHandler}"
 	>
 		<p><span class="bottomIcon1"></span>{filteredList.on.length}</p>
 	</button>
@@ -110,6 +114,7 @@
 		type="button"
 		class="connectOff"
 		on:click="{() => (showListType = 'off')}"
+		on:click="{viewFilterHandler}"
 	>
 		<p><span class="bottomIcon2"></span>{filteredList.off ? filteredList.off.length : '-'}</p>
 	</button>
