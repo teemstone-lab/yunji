@@ -15,9 +15,10 @@
 
 <section class="w-full select-none overflow-hidden rounded border bg-white bg-opacity-80">
 	<WindowHeader bind:host="{host}" index="{index}" bind:viewOptions="{viewOptions}" />
+
 	<div class="flex items-center justify-center gap-x-4 p-4">
 		{#each viewOptions as viewOption}
-			<LiquidGauge viewOption="{viewOption}" selectedData="{host.data[viewOption]}" />
+			<LiquidGauge dataName="{viewOption}" dataNum="{host.data[viewOption]}" size="{200}" />
 		{/each}
 	</div>
 </section>
