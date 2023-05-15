@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { HostDataType, mockHosts, windows } from './liquidGaugesViewStroe';
+	import { HostDataType, mockHosts, views } from './liquidGaugesViewStroe';
 	import { IconCog8Tooth } from '../../icons/icons';
 	import { Button, Chevron, Dropdown, DropdownItem } from 'flowbite-svelte';
 
@@ -21,19 +21,19 @@
 		host.viewOptions = key;
 		viewOptions = key;
 
-		$windows[index].viewOptions = viewOptions;
+		$views[index].viewOptions = viewOptions;
 
 		openOptions = false;
 	};
 
 	const changeHost = (selectedHost: any) => {
-		$windows[index] = selectedHost as HostDataType;
+		$views[index] = selectedHost as HostDataType;
 
 		openHosts = false;
 	};
 
 	$: filteredMockHosts = $mockHosts.filter(
-		(mockHost) => !$windows.map((window) => window.id).includes(mockHost.id),
+		(mockHost) => !$views.map((view) => view.id).includes(mockHost.id),
 	);
 </script>
 
@@ -44,7 +44,7 @@
 	<Button
 		btnClass="w-[calc(100%-40px)] flex items-center px-2 text-lg font-bold hover:text-blue-600 transition-all"
 		data-placement="right-end"
-		on:click="{() => (openHosts = !openHosts)}"
+		on:click="{() => (openHosts = true)}"
 		><span
 			class="mr-2 inline-block h-2 w-2 rounded-full {host.isOn
 				? 'bg-blue-600'
@@ -62,7 +62,7 @@
 	>
 		{#each filteredMockHosts as mockHost (mockHost.id)}
 			<DropdownItem
-				class="w-full {$windows.map((window) => window.id).includes(String(mockHost.id))
+				class="w-full {$views.map((view) => view.id).includes(String(mockHost.id))
 					? 'cursor-default text-gray-300 hover:bg-transparent'
 					: 'hover:bg-blue-100'}"
 				on:click="{() => changeHost(mockHost)}">{mockHost.name}</DropdownItem

@@ -87,4 +87,4 @@ export const mockHosts = writable<HostDataType[]>([
 	},
 ]);
 
-export const windows = writable<HostDataType[]>([]);
+export const views = writable<HostDataType[]>([]);
