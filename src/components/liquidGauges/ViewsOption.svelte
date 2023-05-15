@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Delete, Save as SaveData } from '../../store';
-	import { windows, HostDataType, mockHosts } from './liquidGaugesViewStroe';
+	import { views, HostDataType, mockHosts } from './liquidGaugesViewStroe';
 	import Button from '../common/Button.svelte';
 	import Modal from '../common/Modal.svelte';
 	import { Alert } from 'flowbite-svelte';
@@ -35,7 +35,7 @@
 
 	const save = () => {
 		localStorage.clear();
-		localStorage.setItem('hosts', JSON.stringify($windows));
+		localStorage.setItem('hosts', JSON.stringify($views));
 
 		isSaveData = true;
 		alertState(AlertType.Save);
@@ -45,15 +45,15 @@
 		const data = localStorage.getItem('hosts');
 
 		if (data) {
-			$windows = JSON.parse(data) as HostDataType[];
+			$views = JSON.parse(data) as HostDataType[];
 
-			$windows.forEach((window) => {
-				const item = $mockHosts.find((mockHost) => mockHost.id === window.id);
+			$views.forEach((view) => {
+				const item = $mockHosts.find((mockHost) => mockHost.id === view.id);
 
-				if (item) item.viewOptions = window.viewOptions;
+				if (item) item.viewOptions = view.viewOptions;
 			});
 
-			selected = $windows.length;
+			selected = $views.length;
 			alertState(AlertType.Load);
 		}
 	};

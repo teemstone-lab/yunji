@@ -24,14 +24,14 @@
 	};
 
 	if (process.env.NODE_ENV === 'development') {
-		console.log(window.location.pathname);
-		worker
-			.start({
-				serviceWorker: {
-					url: '/mocks/worker.ts',
-				},
-			})
-			.catch((error) => console.error(error));
+		worker.start().catch((error) => console.error(error));
+		// worker
+		// 	.start({
+		// 		serviceWorker: {
+		// 			url: '/mocks/worker.ts',
+		// 		},
+		// 	})
+		// 	.catch((error) => console.error(error));
 	}
 </script>
 

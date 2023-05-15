@@ -2,33 +2,33 @@
 	import {
 		HostDataType,
 		mockHosts,
-		windows,
+		views,
 	} from '../components/liquidGauges/liquidGaugesViewStroe';
-	import Window from '../components/liquidGauges/Window.svelte';
-	import ViewOptions from '../components/liquidGauges/ViewOptions.svelte';
+	import ViewsOption from '../components/liquidGauges/ViewsOption.svelte';
+	import View from '../components/liquidGauges/View.svelte';
 
 	let showWindowNum: number = 4;
 
 	const updateShowHosts = (data: HostDataType[] = $mockHosts) => {
-		if (showWindowNum > $windows.length) {
+		if (showWindowNum > $views.length) {
 			const hiddenHosts = data.reduce((acc: HostDataType[], cur) => {
-				if (!$windows.some((w) => cur.id === w.id)) {
+				if (!$views.some((w) => cur.id === w.id)) {
 					acc.push(cur);
 				}
 				return acc;
 			}, []);
 
-			const addedNum = showWindowNum - $windows.length;
-			$windows = [...$windows, ...hiddenHosts.slice(0, addedNum)];
+			const addedNum = showWindowNum - $views.length;
+			$views = [...$views, ...hiddenHosts.slice(0, addedNum)];
 		} else {
-			$windows = $windows.slice(0, showWindowNum);
+			$views = $views.slice(0, showWindowNum);
 		}
 
 		for (let i = 0; i < showWindowNum; i++) {
-			const id = $windows[i].id;
+			const id = $views[i].id;
 			const item = data.find((d) => d.id === id);
 
-			if (item) $windows[i] = item;
+			if (item) $views[i] = item;
 		}
 	};
 
@@ -49,12 +49,12 @@
 </script>
 
 <div class="h-screen w-full p-4">
-	<ViewOptions bind:selected="{showWindowNum}" updateShowHosts="{updateShowHosts}" />
+	<ViewsOption bind:selected="{showWindowNum}" updateShowHosts="{updateShowHosts}" />
 
 	<div class="mx-auto grid gap-5 p-4 lg:max-w-5xl lg:grid-cols-2 2xl:max-w-7xl">
-		{#if $windows}
-			{#each $windows as host, index (index)}
-				<Window bind:host="{host}" index="{index}" />
+		{#if $views}
+			{#each $views as host, index (index)}
+				<View bind:host="{host}" index="{index}" />
 			{/each}
 		{/if}
 	</div>
