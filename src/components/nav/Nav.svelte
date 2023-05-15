@@ -6,7 +6,9 @@
 	const buttonStyle = 'p-[10px] font-semibold transition-all';
 </script>
 
-<ul class="flex w-full items-center justify-between gap-[2px] overflow-x-auto text-sm md:text-base">
+<ul
+	class="customScrollbar flex w-full items-center justify-between gap-[2px] overflow-x-auto text-sm md:text-base"
+>
 	<li class="{liStyle} !w-20">
 		<button
 			class="bg-gray-500 text-white hover:bg-gray-700 {buttonStyle}"
