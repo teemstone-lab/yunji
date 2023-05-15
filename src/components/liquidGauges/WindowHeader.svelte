@@ -31,6 +31,10 @@
 
 		openHosts = false;
 	};
+
+	$: filteredMockHosts = $mockHosts.filter(
+		(mockHost) => !$windows.map((window) => window.id).includes(mockHost.id),
+	);
 </script>
 
 <div
@@ -56,7 +60,7 @@
 		frameClass="customScrollbar w-full max-h-40 overflow-y-auto rounded-lg border bg-white bg-opacity-90 shadow-lg"
 		class="w-full"
 	>
-		{#each $mockHosts as mockHost (mockHost.id)}
+		{#each filteredMockHosts as mockHost (mockHost.id)}
 			<DropdownItem
 				class="w-full {$windows.map((window) => window.id).includes(String(mockHost.id))
 					? 'cursor-default text-gray-300 hover:bg-transparent'
