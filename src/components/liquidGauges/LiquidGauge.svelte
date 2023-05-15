@@ -23,7 +23,7 @@
 		height: 90%;
 		left: 16%;
 		background: rgba(3, 169, 244, 0.8);
-		opacity: 0.5;
+		opacity: 0.3;
 		filter: blur(2px);
 		mix-blend-mode: plus-lighter;
 		animation: move 3s infinite linear;

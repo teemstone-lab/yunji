@@ -6,11 +6,7 @@
 	export let host: HostDataType;
 	export let index: number;
 
-	let viewOptions: Array<keyof HostDataType['data']> = ['cpu'];
-
-	if (host.selectedData.length < 1) {
-		host.selectedData = ['cpu'];
-	}
+	$: viewOptions = host.viewOptions;
 </script>
 
 <section class="w-full select-none overflow-hidden rounded border bg-white bg-opacity-80">

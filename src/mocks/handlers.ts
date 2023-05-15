@@ -1,32 +1,32 @@
 import { rest } from 'msw';
 // import type { BasicHostDataType } from '../commonTypes';
-import uuid from '../lib/uuid';
+// import uuid from '../lib/uuid';
 import randomNumber from '../lib/randomNumber';
+import { mockHosts } from '../components/liquidGauges/liquidGaugesViewStroe';
+import { get } from 'svelte/store';
 
-const hosts = Array(10);
-
-for (let i = 0; i < 10; i++) {
-	hosts[i] = {
-		id: uuid(),
-		name: `Host ${i + 1}`,
-		isOn: true,
-		data: {
-			cpu: randomNumber(),
-			mem: randomNumber(),
-			swap: randomNumber(),
-			disk: randomNumber(),
-		},
-		selectedData: [],
-	};
-}
+// for (let i = 0; i < 10; i++) {
+// 	hosts[i] = {
+// 		id: uuid(),
+// 		name: `Host ${i + 1}`,
+// 		isOn: true,
+// 		data: {
+// 			cpu: randomNumber(),
+// 			mem: randomNumber(),
+// 			swap: randomNumber(),
+// 			disk: randomNumber(),
+// 		},
+// 		viewOptions: ['cpu'],
+// 	};
+// }
 
 export const handlers = [
 	rest.get('/hosts', (req, res, ctx) => {
-		return res(ctx.status(200), ctx.json(hosts));
+		return res(ctx.status(200), ctx.json(get(mockHosts)));
 	}),
 	rest.get('/hosts/data', (req, res, ctx) => {
-		hosts.forEach((host) => {
-			host.data = {
+		get(mockHosts).forEach(($mockHosts) => {
+			$mockHosts.data = {
 				cpu: randomNumber(),
 				mem: randomNumber(),
 				swap: randomNumber(),
@@ -34,15 +34,6 @@ export const handlers = [
 			};
 		});
 
-		return res(ctx.status(200), ctx.json(hosts));
+		return res(ctx.status(200), ctx.json(get(mockHosts)));
 	}),
-	// rest.post('/hosts', (req, res, ctx) => {
-	// 	// Persist user's authentication in the session
-	// 	sessionStorage.setItem('is-authenticated', 'true');
-
-	// 	return res(
-	// 		// Respond with a 200 status code
-	// 		ctx.status(200),
-	// 	);
-	// }),
 ];

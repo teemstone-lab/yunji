@@ -8,10 +8,20 @@ onmessage = function (event: MessageEvent) {
 			.then((response) => response.json())
 			.then((data) => postMessage(data as HostDataType[]))
 			.catch((error) => console.error(error));
-		if (!isUpdating) isUpdating = true;
 	};
 
-	callMsw();
+	if (!isUpdating) {
+		callMsw();
+
+		setTimeout(() => {
+			fetch('/hosts/data')
+				.then((response) => response.json())
+				.then((data) => postMessage(data as HostDataType[]))
+				.catch((error) => console.error(error));
+		}, 100);
+
+		isUpdating = true;
+	}
 
 	setInterval(() => {
 		callMsw();

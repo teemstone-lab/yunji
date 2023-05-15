@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { HostDataType, customMockHosts, windows } from './liquidGaugesViewStroe';
+	import { HostDataType, mockHosts, windows } from './liquidGaugesViewStroe';
 	import { IconCog8Tooth } from '../../icons/icons';
 	import { Button, Chevron, Dropdown, DropdownItem } from 'flowbite-svelte';
 
@@ -11,20 +11,17 @@
 	let openOptions: boolean = false;
 
 	const options = [
-		{ key: 'cpu', name: 'CPU' },
-		{ key: 'mem', name: 'Memory' },
+		{ key: ['cpu'], name: 'CPU' },
+		{ key: ['mem'], name: 'Memory' },
 		{ key: ['cpu', 'mem'], name: 'CPU + Memory' },
 	];
 
 	const selectData = (prop: any) => {
-		const key = prop as keyof HostDataType['data'] | Array<keyof HostDataType['data']>;
-		if (typeof key === 'object') {
-			host.selectedData = key;
-			viewOptions = key;
-		} else {
-			host.selectedData = [key];
-			viewOptions = [key];
-		}
+		const key = prop as Array<keyof HostDataType['data']>;
+		host.viewOptions = key;
+		viewOptions = key;
+
+		$windows[index].viewOptions = viewOptions;
 
 		openOptions = false;
 	};
@@ -59,9 +56,9 @@
 		frameClass="customScrollbar w-full max-h-40 overflow-y-auto rounded-lg border bg-white bg-opacity-90 shadow-lg"
 		class="w-full"
 	>
-		{#each $customMockHosts as mockHost (mockHost.id)}
+		{#each $mockHosts as mockHost (mockHost.id)}
 			<DropdownItem
-				class="w-full {host.id === mockHost.id
+				class="w-full {$windows.map((window) => window.id).includes(String(mockHost.id))
 					? 'cursor-default text-gray-300 hover:bg-transparent'
 					: 'hover:bg-blue-100'}"
 				on:click="{() => changeHost(mockHost)}">{mockHost.name}</DropdownItem

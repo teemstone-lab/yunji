@@ -20,11 +20,11 @@
 	const icon = () => {
 		switch (btnType) {
 			case Save:
-				return 'bg-blue-600 hover:bg-blue-700 text-white';
+				return 'bg-blue-600 hover:bg-blue-700 text-white border-blue-600';
 			case Edit:
-				return 'bg-blue-600 hover:bg-blue-700 text-white';
+				return 'bg-blue-600 hover:bg-blue-700 text-white border-blue-600';
 			case Delete:
-				return 'bg-red-600 hover:bg-red-700 text-white';
+				return 'bg-red-600 hover:bg-red-700 text-white border-red-600';
 			case Cancel:
 				return 'bg-gray-600 hover:bg-gray-700 text-white';
 			default:
@@ -35,6 +35,22 @@
 	const isIconStyle: string = isIcon
 		? `text-gray-600 hover:text-gray-800`
 		: `${icon()} border border-dark-900`;
+
+	const fontSize = (fs: string) => {
+		switch (fs) {
+			case 'xs':
+				return 'text-xs';
+			case 'md':
+				return 'text-md';
+			case 'lg':
+				return 'text-lg';
+			case 'xl':
+				return 'text-xl';
+
+			default:
+				return 'text-sm';
+		}
+	};
 </script>
 
 <button
@@ -43,9 +59,9 @@
 			onClickF();
 		}
 	}}"
-	class="{`${size === 'sm' ? 'text-sm' : ''}${
-		size === 'lg' ? 'text-lg' : ''
-	} ${isIconStyle} rounded-lg px-2 py-2 transition-all disabled:opacity-50`}"
+	class="{`${fontSize(
+		size,
+	)} ${isIconStyle} rounded-lg px-4 py-2 font-semibold transition-all disabled:opacity-50`}"
 	disabled="{disabled}"
 >
 	{#if isIcon}
