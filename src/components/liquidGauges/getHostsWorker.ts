@@ -4,7 +4,11 @@ onmessage = function (event: MessageEvent) {
 	let isUpdating: boolean = false;
 
 	const callMsw = () => {
-		fetch(isUpdating ? '/hosts/data' : '/hosts')
+		fetch(isUpdating ? '/hosts/data' : '/hosts', {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
 			.then((response) => response.json())
 			.then((data) => postMessage(data as HostDataType[]))
 			.catch((error) => console.error(error));
@@ -14,7 +18,11 @@ onmessage = function (event: MessageEvent) {
 		callMsw();
 
 		setTimeout(() => {
-			fetch('/hosts/data')
+			fetch('/hosts/data', {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
 				.then((response) => response.json())
 				.then((data) => postMessage(data as HostDataType[]))
 				.catch((error) => console.error(error));
