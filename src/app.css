@@ -8,6 +8,7 @@
 
 .customScrollbar::-webkit-scrollbar {
 	width: 8px;
+	height: 8px;
 }
 .customScrollbar::-webkit-scrollbar-track {
 	background: #e8e8e8;

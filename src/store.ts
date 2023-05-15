@@ -2,12 +2,13 @@ import { writable } from 'svelte/store';
 export const dark = writable(false);
 
 export const NavItems = [
+	'liquidGaugesView',
 	'fruitShop',
 	'todoList',
 	'carouselCallWorker',
 	'onTuneViewer',
-	'webWorker',
-	'calculator',
+	// 'webWorker',
+	// 'calculator',
 ];
 
 enum ButtonType {

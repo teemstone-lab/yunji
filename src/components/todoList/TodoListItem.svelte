@@ -47,6 +47,10 @@
 		}
 	};
 
+	const inputElementOnFocus = (el: HTMLInputElement) => {
+		el.focus();
+	};
+
 	$: {
 		isEditThisItem = isEdit === todo.id;
 		isNotEditThisItem = isEdit && isEdit !== todo.id ? true : false;
@@ -64,10 +68,10 @@
 		/>
 		{#if isEditThisItem}
 			<input
+				use:inputElementOnFocus
 				bind:value="{editedTitle}"
 				on:keydown="{(e) => keyPressFunc(String(e.key))}"
 				on:mousedown="{() => (isEmpty = false)}"
-				autofocus="{isEditThisItem}"
 				class="h-[60%] w-full border-b-2 border-indigo-600 placeholder:text-xs placeholder:text-red-600 focus:outline-0"
 				placeholder="{isEmpty ? '내용을 입력해주세요!' : ''}"
 				maxlength="{30}"
@@ -100,7 +104,7 @@
 					size="xs"
 					disabled="{isNotEditThisItem}"
 					on:click="{() => (isEdit = todo.id)}"
-					><IconPencil width="{18}" height="{18}" /></Button
+					><IconPencil width="{18}" height="{18}" solid /></Button
 				>
 				<Button
 					color="red"

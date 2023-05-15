@@ -1,5 +1,5 @@
 <script lang="ts">
-	let currentPage = 'index';
+	import Router from 'svelte-spa-router';
 	import Index from './pages/index.svelte';
 	import WebWorker from './pages/webWorker.svelte';
 	import OnTuneViewer from './pages/onTuneViewer.svelte';
@@ -8,35 +8,28 @@
 	import CarouselCallWorker from './pages/carouselCallWorker.svelte';
 	import TodoList from './pages/todoList.svelte';
 	import FruitShop from './pages/fruitsShop.svelte';
+	import liquidGaugesView from './pages/liquidGaugesView.svelte';
+	import { worker } from './mocks/worker';
 
-	type ClickEvent = MouseEvent & {
-		currentTarget: EventTarget & HTMLButtonElement;
+	const routes = {
+		'/': Index,
+
+		'/liquidGaugesView': liquidGaugesView,
+		'/fruitShop': FruitShop,
+		'/todoList': TodoList,
+		'/carouselCallWorker': CarouselCallWorker,
+		'/onTuneViewer': OnTuneViewer,
+		'/webWorker': WebWorker,
+		'/calculator': Calculator,
 	};
-	const clickHandler = (e: ClickEvent) => {
-		const target = e.target as HTMLButtonElement;
-		currentPage = target.innerText;
-	};
+
+	if (process.env.NODE_ENV === 'development') {
+		worker.start().catch((error) => console.error(error));
+	}
 </script>
 
-<Nav clickHandler="{clickHandler}" />
+<Nav />
 
 <main>
-	{#if currentPage === 'index'}
-		<div class="px-4">
-			<Index />
-		</div>
-	{:else if currentPage === 'fruitShop'}
-		<FruitShop />
-	{:else if currentPage === 'todoList'}
-		<TodoList />
-	{:else if currentPage === 'carouselCallWorker'}
-		<CarouselCallWorker />
-	{:else if currentPage === 'onTuneViewer'}
-		<OnTuneViewer />
-	{:else if currentPage === 'webWorker'}
-		<WebWorker />
-	{:else if currentPage === 'calculator'}
-		<Calculator />
-	{/if}
-	<!-- 일반 else 의 경우도  -->
+	<Router routes="{routes}" />
 </main>

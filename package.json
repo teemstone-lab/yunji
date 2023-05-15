@@ -78,6 +78,7 @@
 		"jest-environment-jsdom": "^29.3.1",
 		"jest-transform-stub": "^2.0.0",
 		"lint-staged": "^13.1.0",
+		"msw": "^1.2.1",
 		"npm": "^9.6.2",
 		"npm-run-all": "^4.1.5",
 		"postcss": "^8.4.21",
@@ -92,6 +93,7 @@
 		"svelte-jester": "^2.3.2",
 		"svelte-loader": "^3.1.4",
 		"svelte-preprocess": "^5.0.0",
+		"svelte-spa-router": "^3.3.0",
 		"tailwindcss": "^3.2.4",
 		"ts-jest": "^29.0.3",
 		"tslib": "^2.4.1",
@@ -126,10 +128,12 @@
 		"rollup-plugin-terser": "^7.0.2",
 		"routify": "^1.2.7",
 		"svelte-headless-table": "^0.17.2",
-		"svelte-spa-router": "^3.3.0",
 		"svelte-tiny-virtual-list": "^2.0.5",
 		"tabulator-tables": "^5.4.4",
 		"tui-grid": "^4.21.9",
 		"uuid": "^9.0.0"
+	},
+	"msw": {
+		"workerDirectory": "public"
 	}
 }

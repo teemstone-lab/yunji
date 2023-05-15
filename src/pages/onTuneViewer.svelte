@@ -19,8 +19,10 @@
 </style>
 
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { Header, SideNav, Footer } from '../components/onTuneViewer';
 	import type { DateTimeFormatOptions, MockHostType, ShowViewerListType } from 'src/store';
+	import { push, querystring, location } from 'svelte-spa-router';
 
 	let list: MockHostType[] = [];
 	let filteredList = {
@@ -87,6 +89,12 @@
 	};
 	setInterval(() => dateTime(), 1000);
 	// #endregion Date-Time
+
+	onMount(() => {
+		showListType = $querystring?.split('=')[1] as ShowViewerListType;
+	});
+
+	const viewFilterHandler = () => push(`${$location}?view=${showListType}`);
 </script>
 
 <!-- 4주차 실습하신 것을 가져와 컴포넌트 분리, 기능 추가 등의 과정을 거침 -->
@@ -99,6 +107,7 @@
 			bind:showListType="{showListType}"
 			bind:list="{list}"
 			bind:filteredList="{filteredList}"
+			viewFilterHandler="{viewFilterHandler}"
 		/>
 
 		<div class="chartTab"
@@ -130,6 +139,7 @@
 		bind:showListType="{showListType}"
 		list="{list}"
 		filteredList="{filteredList}"
+		viewFilterHandler="{viewFilterHandler}"
 	/>
 	<!--  -->
 </div>
