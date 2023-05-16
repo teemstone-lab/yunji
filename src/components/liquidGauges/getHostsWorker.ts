@@ -1,6 +1,6 @@
 import type { HostDataType } from './liquidGaugesViewStroe';
 
-const dev = process.env.NODE_ENV === 'development' ? '' : 'https://teemstone-lab.github.io/yunji';
+const dev = process.env.NODE_ENV === 'development' ? '' : 'https://teemstone-lab.github.io';
 const url = { hosts: `${dev}/hosts`, hostsData: `${dev}/hosts/data` };
 
 onmessage = function (event: MessageEvent) {
