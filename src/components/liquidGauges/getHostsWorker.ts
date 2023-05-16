@@ -1,19 +1,17 @@
 import type { HostDataType } from './liquidGaugesViewStroe';
 
+const dev = process.env.NODE_ENV === 'development' ? '' : 'https://teemstone-lab.github.io/yunji';
+const url = { hosts: `${dev}/hosts`, hostsData: `${dev}/hosts/data` };
+
 onmessage = function (event: MessageEvent) {
 	let isUpdating: boolean = false;
 
 	const callMsw = () => {
-		fetch(
-			isUpdating
-				? 'https://teemstone-lab.github.io/yunji/hosts/data'
-				: 'https://teemstone-lab.github.io/yunji/hosts',
-			{
-				headers: {
-					'Content-Type': 'application/json',
-				},
+		fetch(isUpdating ? url.hostsData : url.hosts, {
+			headers: {
+				'Content-Type': 'application/json',
 			},
-		)
+		})
 			.then((response) => response.json())
 			.then((data) => postMessage(data as HostDataType[]))
 			.catch((error) => console.error(error));
@@ -23,7 +21,7 @@ onmessage = function (event: MessageEvent) {
 		callMsw();
 
 		setTimeout(() => {
-			fetch('https://teemstone-lab.github.io/yunji/hosts/data', {
+			fetch(url.hostsData, {
 				headers: {
 					'Content-Type': 'application/json',
 				},
