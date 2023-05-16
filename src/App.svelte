@@ -24,14 +24,24 @@
 	};
 
 	// if (process.env.NODE_ENV === 'development') {
-	worker.start().catch((error) => console.error(error));
-	// worker
-	// 	.start({
-	// 		serviceWorker: {
-	// 			url: '/mocks/worker.ts',
-	// 		},
-	// 	})
-	// 	.catch((error) => console.error(error));
+	// worker.start().catch((error) => console.error(error));
+
+	if (location.hostname === 'teemstone-lab.github.io') {
+		worker
+			.start({
+				// serviceWorker: {
+				// 	url: '/mocks/worker.ts',
+				// },
+
+				serviceWorker: {
+					url: '/yunji/mockServiceWorker.js',
+				},
+			})
+			.catch((error) => console.error(error));
+	} else {
+		worker.start().catch((error) => console.error(error));
+	}
+
 	// }
 </script>
 
