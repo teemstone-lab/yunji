@@ -53,7 +53,7 @@
 
 	<div class="mx-auto grid gap-5 p-4 lg:max-w-5xl lg:grid-cols-2 2xl:max-w-7xl">
 		{#if $views}
-			{#each $views as host, index (index)}
+			{#each $views as host, index (host.id)}
 				<View bind:host="{host}" index="{index}" />
 			{/each}
 		{/if}
