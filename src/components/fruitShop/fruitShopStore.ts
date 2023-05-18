@@ -1,3 +1,4 @@
+import hexToRgb from '../../lib/hexToRgb';
 import uuid from '../../lib/uuid';
 import { get, writable } from 'svelte/store';
 
@@ -191,11 +192,29 @@ export const shops = {
 					thisShop.isHovering = true;
 				}
 			} else {
-				$shopsData.forEach((shop) => (shop.isHovering = false));
+				$shopsData.forEach((shop) => {
+					setTimeout(() => {
+						shop.isHovering = false;
+					}, 100);
+				});
 			}
 
 			return $shopsData;
 		});
+	},
+	/**
+	 * 가게의 배경 컬러 변경
+	 * @param {Shop} shop 가게 하나의 데이터
+	 */
+	setShopBg(shop: Shop) {
+		switch (shop.isHovering) {
+			case 'duplicate':
+				return 'rgb(249 128 128)';
+			case true:
+				return hexToRgb(shop.color, 20);
+			default:
+				return 'transparent';
+		}
 	},
 	/**
 	 * 가게의 fruit 에 새 아이템 추가
@@ -264,6 +283,8 @@ export const shops = {
 					$shopsData[shopIndex].fruits.push(item);
 				}
 
+				$shopsData[shopIndex].isHovering = false;
+
 				return $shopsData;
 			});
 
@@ -272,8 +293,6 @@ export const shops = {
 
 				return $fruitsData;
 			});
-
-			shops.setHoveringShop(null);
 		}
 	},
 };

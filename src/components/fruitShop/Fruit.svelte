@@ -1,8 +1,16 @@
 <script lang="ts">
-	import type { Fruit } from './fruitShopStore';
+	import { Fruit, Shop, shops } from './fruitShopStore';
 
 	export let fruit: Fruit;
+	export let shop: Shop | undefined = undefined;
+
 	let isShowDeleteBtn: boolean = false;
+
+	const innerShopCase = () => {
+		if (shop) {
+			shops.setHoveringShop(shop.id);
+		}
+	};
 </script>
 
 <li
@@ -12,6 +20,8 @@
 		: 'bg-transparent'}"
 	draggable="{true}"
 	on:dragstart
+	on:dragenter="{innerShopCase}"
+	on:dragleave="{() => shops.setHoveringShop(null)}"
 	on:mouseover="{() => (isShowDeleteBtn = true)}"
 	on:mouseleave="{() => {
 		isShowDeleteBtn = false;
