@@ -6,6 +6,7 @@
 	} from '../components/liquidGauges/liquidGaugesViewStroe';
 	import ViewsOption from '../components/liquidGauges/ViewsOption.svelte';
 	import View from '../components/liquidGauges/View.svelte';
+	import { onDestroy } from 'svelte';
 
 	let showWindowNum: number = 4;
 
@@ -46,6 +47,8 @@
 		updateShowHosts(data);
 	};
 	// #endregion Worker
+
+	onDestroy(() => worker.terminate());
 </script>
 
 <div class="h-screen w-full p-4">
@@ -53,7 +56,7 @@
 
 	<div class="mx-auto grid gap-5 p-4 lg:max-w-5xl lg:grid-cols-2 2xl:max-w-7xl">
 		{#if $views}
-			{#each $views as host, index (index)}
+			{#each $views as host, index (host.id)}
 				<View bind:host="{host}" index="{index}" />
 			{/each}
 		{/if}

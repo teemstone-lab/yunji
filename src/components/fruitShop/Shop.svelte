@@ -1,28 +1,16 @@
 <script lang="ts">
-	import { Shop, fruits } from './fruitShopStore';
+	import { Shop, fruits, shops } from './fruitShopStore';
 	import Fruit from './Fruit.svelte';
-	import hexToRgb from '../../lib/hexToRgb';
 	import ShopTitle from './ShopTitle.svelte';
 	import AddNewFruit from './AddNewFruit.svelte';
 
 	export let index: number;
 	export let shop: Shop;
-
-	const shopBg = (isHover: boolean | 'duplicate') => {
-		switch (isHover) {
-			case 'duplicate':
-				return 'rgb(249 128 128)';
-			case true:
-				return hexToRgb(shop.color, 20);
-			default:
-				return 'transparent';
-		}
-	};
 </script>
 
 <div
 	class="flex h-72 w-full flex-col overflow-hidden rounded-xl p-4"
-	style="background-color: {shopBg(shop.isHovering)};"
+	style="background-color: {shops.setShopBg(shop)};"
 	on:drop
 	on:dragover|preventDefault="{() => false}"
 >
@@ -37,8 +25,10 @@
 			{#each shop.fruits as fruit, fruitIndex (fruit.id)}
 				<Fruit
 					fruit="{fruit}"
-					on:dragstart="{(event) =>
-						fruits.dragStart(event, fruitIndex, String(fruit.id), index)}"
+					shop="{shop}"
+					on:dragstart="{(event) => {
+						fruits.dragStart(event, fruitIndex, String(fruit.id), index);
+					}}"
 					on:click="{() => fruits.deleteItem(fruitIndex, index)}"
 				/>
 			{/each}
