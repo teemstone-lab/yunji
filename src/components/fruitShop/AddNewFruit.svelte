@@ -14,7 +14,7 @@
 
 	export let shop: Shop | undefined = undefined;
 
-	let selected: Fruit;
+	let selected: Fruit | 'default';
 
 	const defaultButtonStyle =
 		'flex items-center rounded-full px-2 py-1 text-xs font-semibold text-white transition-all disabled:opacity-30';
@@ -69,26 +69,30 @@
 </script>
 
 {#if !shop}
-	<label class="py-5"
-		>Add New fruit
-		<select
-			class="mx-2 mt-2"
-			bind:value="{selected}"
-			on:change="{() => {
-				fruits.setItem(selected);
-			}}"
-		>
-			<option selected disabled value="default">Choose option</option>
+	<div class="py-5">
+		<label>
+			<select
+				class="mt-2 w-56"
+				bind:value="{selected}"
+				on:keydown="{(e) => (e.key === 'Escape' ? (selected = 'default') : '')}"
+			>
+				<option selected disabled value="default">Add New fruit</option>
 
-			{#each basicFruitsData as addFruit (addFruit.id)}
-				<option
-					value="{addFruit}"
-					disabled="{alreadyAdded(String(addFruit.id))}"
-					class="disabled:text-gray-300">{addFruit.icon}{addFruit.name}</option
-				>
-			{/each}
-		</select>
-	</label>
+				{#each basicFruitsData as addFruit (addFruit.id)}
+					<option
+						value="{addFruit}"
+						disabled="{alreadyAdded(String(addFruit.id))}"
+						class="disabled:text-gray-300">{addFruit.icon}{addFruit.name}</option
+					>
+				{/each}
+			</select>
+		</label>
+		<button
+			class="border border-blue-600 bg-blue-600 p-2 text-white disabled:opacity-50"
+			disabled="{selected === 'default'}"
+			on:click="{() => selected !== 'default' && fruits.setItem(selected)}">ADD</button
+		>
+	</div>
 {/if}
 
 <div class="flex gap-x-2">
