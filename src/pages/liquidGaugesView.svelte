@@ -6,6 +6,7 @@
 	} from '../components/liquidGauges/liquidGaugesViewStroe';
 	import ViewsOption from '../components/liquidGauges/ViewsOption.svelte';
 	import View from '../components/liquidGauges/View.svelte';
+	import { onDestroy } from 'svelte';
 
 	let showWindowNum: number = 4;
 
@@ -46,6 +47,8 @@
 		updateShowHosts(data);
 	};
 	// #endregion Worker
+
+	onDestroy(() => worker.terminate());
 </script>
 
 <div class="h-screen w-full p-4">
