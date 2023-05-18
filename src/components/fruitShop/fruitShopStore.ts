@@ -76,9 +76,12 @@ const shopsData = writable<Shop[]>(
 		const initFruit = get(fruitsData);
 		shopsData.update((shopData) =>
 			shopData.map((shop, index) => {
-				const slickIndex = { start: index * 2, end: index * 2 + 2 };
+				if (shop.fruits.length === 0) {
+					const slickIndex = { start: index * 2, end: index * 2 + 2 };
 
-				shop.fruits.push(...initFruit.slice(slickIndex.start, slickIndex.end));
+					shop.fruits.push(...initFruit.slice(slickIndex.start, slickIndex.end));
+				}
+
 				return { ...shop, fruits: shop.fruits };
 			}),
 		);

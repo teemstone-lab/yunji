@@ -19,7 +19,7 @@
 </style>
 
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { Header, SideNav, Footer } from '../components/onTuneViewer';
 	import type { DateTimeFormatOptions, MockHostType, ShowViewerListType } from 'src/store';
 	import { push, querystring, location } from 'svelte-spa-router';
@@ -92,6 +92,10 @@
 
 	onMount(() => {
 		showListType = $querystring?.split('=')[1] as ShowViewerListType;
+	});
+
+	onDestroy(() => {
+		worker.terminate();
 	});
 
 	const viewFilterHandler = () => push(`${$location}?view=${showListType}`);

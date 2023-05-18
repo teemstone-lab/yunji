@@ -9,7 +9,7 @@
 	export let isNewItem: boolean;
 </script>
 
-<ul class="customScrollbar h-full w-full space-y-4 overflow-y-scroll pb-20">
+<ul class="customScrollbar h-full w-full space-y-4 overflow-y-scroll">
 	{#if todoLists && todoLists.length > 0}
 		{#each todoLists as todo (todo.id)}
 			<TodoListItem
