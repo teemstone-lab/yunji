@@ -4,6 +4,7 @@
 <script lang="ts">
 	import type { MockGroupType } from 'src/components/carousel/carouselStore';
 	import Carousel from '../components/carousel/Carousel.svelte';
+	import { onDestroy } from 'svelte';
 
 	let count: number = 0;
 	let groups: MockGroupType[];
@@ -19,6 +20,8 @@
 	};
 
 	worker.postMessage({ min: 5, max: 20 });
+
+	onDestroy(() => worker.terminate());
 	// #endregion Web Worker - postmessage
 </script>
 

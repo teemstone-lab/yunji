@@ -22,7 +22,7 @@
 			on:dragenter
 			on:dragleave
 		>
-			{#each shop.fruits as fruit, fruitIndex (fruit.id)}
+			{#each shop.fruits as fruit, fruitIndex (fruitIndex)}
 				<Fruit
 					fruit="{fruit}"
 					shop="{shop}"
