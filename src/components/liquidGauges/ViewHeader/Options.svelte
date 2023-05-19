@@ -16,7 +16,7 @@
 </script>
 
 <Button
-	btnClass="flex h-full w-10 items-center justify-center transition-all text-gray-500 hover:text-blue-600 shrink-0"
+	btnClass="flex h-full w-12 items-center justify-center transition-all text-gray-500 hover:text-blue-600 shrink-0"
 	data-placement="left-start"
 	on:click="{() => (openOptions = true)}"><IconCog8Tooth solid /></Button
 >

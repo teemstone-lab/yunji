@@ -1,6 +1,7 @@
 <script lang="ts">
 	import {
 		HostDataType,
+		autoLoad,
 		mockHosts,
 		views,
 	} from '../components/liquidGauges/liquidGaugesViewStroe';
@@ -9,6 +10,10 @@
 	import { onDestroy } from 'svelte';
 
 	let showWindowNum: number = 4;
+
+	if ($autoLoad) {
+		showWindowNum = autoLoad.loadSavedData() || 4;
+	}
 
 	const updateShowHosts = (data: HostDataType[] = $mockHosts) => {
 		if (showWindowNum > $views.length) {
@@ -51,14 +56,17 @@
 	onDestroy(() => worker.terminate());
 </script>
 
-<div class="h-screen w-full p-4">
-	<ViewsOption bind:selected="{showWindowNum}" updateShowHosts="{updateShowHosts}" />
+<div class="h-auto w-full p-4 lg:h-[calc(100vh-44px)]">
+	<div class="mx-auto flex h-full flex-col lg:max-w-5xl 2xl:max-w-7xl">
+		<ViewsOption bind:selected="{showWindowNum}" updateShowHosts="{updateShowHosts}" />
 
-	<div class="mx-auto grid gap-5 p-4 lg:max-w-5xl lg:grid-cols-2 2xl:max-w-7xl">
-		{#if $views}
-			{#each $views as host, index (host.id)}
-				<View bind:host="{host}" index="{index}" />
-			{/each}
-		{/if}
+		<!-- <div class="grid grow gap-5 lg:grid-cols-2"> -->
+		<div class="grid gap-5 pb-4 lg:grid-cols-2">
+			{#if $views}
+				{#each $views as host, index (host.id)}
+					<View bind:host="{host}" index="{index}" />
+				{/each}
+			{/if}
+		</div>
 	</div>
 </div>

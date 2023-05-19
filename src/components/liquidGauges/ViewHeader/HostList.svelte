@@ -19,16 +19,21 @@
 </script>
 
 <Button
-	btnClass="w-[calc(100%-40px)] flex items-center px-2 text-lg font-bold hover:text-blue-600 transition-all"
+	btnClass="w-[calc(100%-40px)] flex flex-col px-3 text-lg font-bold hover:text-blue-600 transition-all text-left"
 	data-placement="right-end"
 	on:click="{() => (openHosts = true)}"
-	><span
-		class="mr-2 inline-block h-2 w-2 rounded-full {host.isOn ? 'bg-blue-600' : 'bg-gray-400'}"
-	></span>
-	<span class="text-rtl inline-block h-full w-auto max-w-full truncate rounded-sm text-left"
-		>{host.name}</span
+>
+	<p class="flex h-full w-full items-center rounded-sm">
+		<span
+			class="mr-2 inline-block h-2 w-2 shrink-0 rounded-full {host.isOn
+				? 'bg-blue-600'
+				: 'bg-gray-400'}"></span>
+		<span class="text-rtl h-full w-auto max-w-full truncate rounded-sm px-1">{host.name}</span>
+		<span class="shrink-0"> <Chevron /></span>
+	</p>
+	<small class="w-auto max-w-full shrink-0 truncate pl-5 text-xs font-normal text-gray-500"
+		>{host.id}</small
 	>
-	<span class="shrink-0"> <Chevron /></span>
 </Button>
 
 <!-- Host List -->
@@ -40,10 +45,12 @@
 >
 	{#each filteredMockHosts as mockHost (mockHost.id)}
 		<DropdownItem
-			class="w-full {$views.map((view) => view.id).includes(String(mockHost.id))
+			class="flex w-full flex-col {$views.map((view) => view.id).includes(String(mockHost.id))
 				? 'cursor-default text-gray-300 hover:bg-transparent'
 				: 'hover:bg-blue-100'}"
-			on:click="{() => changeHost(mockHost)}">{mockHost.name}</DropdownItem
+			on:click="{() => changeHost(mockHost)}"
+			><span>{mockHost.name}</span>
+			<small class="shrink-0 font-normal text-gray-500">{mockHost.id}</small></DropdownItem
 		>
 	{/each}
 </Dropdown>

@@ -1,6 +1,6 @@
 // import randomNumber from '../../lib/randomNumber';
 import type { BasicDatasType, BasicHostType } from '../../commonTypes';
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 
 export type HostDataType = BasicHostType & {
 	data: BasicDatasType;
@@ -98,3 +98,31 @@ export const mockHosts = writable<HostDataType[]>([
 ]);
 
 export const views = writable<HostDataType[]>([]);
+
+const getIsAutoLoad = localStorage.getItem('isAutoLoad');
+const isAutoLoad = writable<boolean>(
+	getIsAutoLoad ? (JSON.parse(getIsAutoLoad) as boolean) : false,
+	() => {},
+);
+
+export const autoLoad = {
+	...isAutoLoad,
+	getIsAutoLoadState: () => {
+		if (getIsAutoLoad) isAutoLoad.set(JSON.parse(getIsAutoLoad) as boolean);
+	},
+	loadSavedData: () => {
+		const data = localStorage.getItem('hosts');
+
+		if (data) {
+			views.set(JSON.parse(data) as HostDataType[]);
+
+			get(views).forEach((view) => {
+				const item = get(mockHosts).find((mockHost) => mockHost.id === view.id);
+
+				if (item) item.viewOptions = view.viewOptions;
+			});
+
+			return get(views).length;
+		}
+	},
+};

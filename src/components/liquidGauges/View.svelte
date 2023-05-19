@@ -7,10 +7,12 @@
 	export let index: number;
 </script>
 
-<section class="w-full select-none overflow-hidden rounded border bg-white bg-opacity-80">
+<section
+	class="flex w-full select-none flex-col overflow-hidden rounded border bg-white bg-opacity-80"
+>
 	<ViewHeader bind:host="{host}" index="{index}" />
 
-	<div class="flex items-center justify-center gap-x-4 p-4">
+	<div class="flex h-full grow items-center justify-center gap-x-4 p-4">
 		{#each host.viewOptions as viewOption}
 			<LiquidGauge dataName="{viewOption}" dataNum="{host.data[viewOption]}" />
 		{/each}
