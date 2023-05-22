@@ -1,15 +1,17 @@
 <script lang="ts">
 	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
-	import { HostDataType, viewOptions } from '../liquidGaugesViewStroe';
+	import { HostDataType, viewOptions, views } from '../liquidGaugesViewStroe';
 	import { IconCog8Tooth } from '../../../icons/icons';
 
 	export let host: HostDataType;
+	export let index: number;
 
 	let openOptions: boolean = false;
 
 	const selectViewType = (prop: any) => {
 		const key = prop as Array<keyof HostDataType['data']>;
-		host.viewOptions = key;
+		$views[index].viewOptions = key;
+		// host.viewOptions = key;
 
 		openOptions = false;
 	};

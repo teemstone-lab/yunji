@@ -34,7 +34,7 @@
 			const id = $views[i].id;
 			const item = data.find((d) => d.id === id);
 
-			if (item) $views[i] = item;
+			if (item) $views[i] = { ...item, viewOptions: $views[i].viewOptions };
 		}
 	};
 
@@ -63,7 +63,7 @@
 		<!-- <div class="grid grow gap-5 lg:grid-cols-2"> -->
 		<div class="grid gap-5 pb-4 lg:grid-cols-2">
 			{#if $views}
-				{#each $views as host, index (host.id)}
+				{#each $views as host, index (index)}
 					<View bind:host="{host}" index="{index}" />
 				{/each}
 			{/if}

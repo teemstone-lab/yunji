@@ -13,9 +13,9 @@
 		openHosts = false;
 	};
 
-	$: filteredMockHosts = $mockHosts.filter(
-		(mockHost) => !$views.map((view) => view.id).includes(mockHost.id),
-	);
+	// $: filteredMockHosts = $mockHosts.filter(
+	// 	(mockHost) => !$views.map((view) => view.id).includes(mockHost.id),
+	// );
 </script>
 
 <Button
@@ -43,14 +43,16 @@
 	frameClass="customScrollbar w-full max-h-40 overflow-y-auto rounded-lg border bg-white bg-opacity-90 shadow-lg"
 	class="w-full"
 >
-	{#each filteredMockHosts as mockHost (mockHost.id)}
+	{#each $mockHosts as mockHost}
 		<DropdownItem
 			class="flex w-full flex-col {$views.map((view) => view.id).includes(String(mockHost.id))
-				? 'cursor-default text-gray-300 hover:bg-transparent'
-				: 'hover:bg-blue-100'}"
+				? 'text-blue-600'
+				: // ? 'cursor-default text-gray-300 hover:bg-transparent'
+				  'hover:bg-blue-100'}"
 			on:click="{() => changeHost(mockHost)}"
-			><span>{mockHost.name}</span>
-			<small class="shrink-0 font-normal text-gray-500">{mockHost.id}</small></DropdownItem
 		>
+			<span>{mockHost.name}</span>
+			<small class="shrink-0 font-normal text-gray-500">{mockHost.id}</small>
+		</DropdownItem>
 	{/each}
 </Dropdown>
