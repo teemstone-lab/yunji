@@ -2,8 +2,8 @@
 	import {
 		HostDataType,
 		autoLoad,
+		displayedHosts,
 		mockHosts,
-		views,
 	} from '../components/liquidGauges/liquidGaugesViewStroe';
 	import ViewsOption from '../components/liquidGauges/ViewsOption.svelte';
 	import View from '../components/liquidGauges/View.svelte';
@@ -16,25 +16,25 @@
 	}
 
 	const updateShowHosts = (data: HostDataType[] = $mockHosts) => {
-		if (showWindowNum > $views.length) {
+		if (showWindowNum > $displayedHosts.length) {
 			const hiddenHosts = data.reduce((acc: HostDataType[], cur) => {
-				if (!$views.some((w) => cur.id === w.id)) {
+				if (!$displayedHosts.some((w) => cur.id === w.id)) {
 					acc.push(cur);
 				}
 				return acc;
 			}, []);
 
-			const addedNum = showWindowNum - $views.length;
-			$views = [...$views, ...hiddenHosts.slice(0, addedNum)];
+			const addedNum = showWindowNum - $displayedHosts.length;
+			$displayedHosts = [...$displayedHosts, ...hiddenHosts.slice(0, addedNum)];
 		} else {
-			$views = $views.slice(0, showWindowNum);
+			$displayedHosts = $displayedHosts.slice(0, showWindowNum);
 		}
 
 		for (let i = 0; i < showWindowNum; i++) {
-			const id = $views[i].id;
+			const id = $displayedHosts[i].id;
 			const item = data.find((d) => d.id === id);
 
-			if (item) $views[i] = { ...item, viewOptions: $views[i].viewOptions };
+			if (item) $displayedHosts[i] = { ...item, viewOptions: $displayedHosts[i].viewOptions };
 		}
 	};
 
@@ -43,7 +43,7 @@
 		new URL('../components/liquidGauges/getHostsWorker.ts', import.meta.url),
 	);
 
-	worker.postMessage('');
+	worker.postMessage('start');
 
 	worker.onmessage = (event) => {
 		const data = event.data as HostDataType[];
@@ -62,8 +62,8 @@
 
 		<!-- <div class="grid grow gap-5 lg:grid-cols-2"> -->
 		<div class="grid gap-5 pb-4 lg:grid-cols-2">
-			{#if $views}
-				{#each $views as host, index (index)}
+			{#if $displayedHosts}
+				{#each $displayedHosts as host, index (index)}
 					<View bind:host="{host}" index="{index}" />
 				{/each}
 			{/if}

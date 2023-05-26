@@ -1,4 +1,3 @@
-// import randomNumber from '../../lib/randomNumber';
 import type { BasicDatasType, BasicHostType } from '../../commonTypes';
 import { get, writable } from 'svelte/store';
 
@@ -97,7 +96,7 @@ export const mockHosts = writable<HostDataType[]>([
 	},
 ]);
 
-export const views = writable<HostDataType[]>([]);
+export const displayedHosts = writable<HostDataType[]>([]);
 
 const getIsAutoLoad = localStorage.getItem('isAutoLoad');
 const isAutoLoad = writable<boolean>(
@@ -114,15 +113,15 @@ export const autoLoad = {
 		const data = localStorage.getItem('hosts');
 
 		if (data) {
-			views.set(JSON.parse(data) as HostDataType[]);
+			displayedHosts.set(JSON.parse(data) as HostDataType[]);
 
-			get(views).forEach((view) => {
+			get(displayedHosts).forEach((view) => {
 				const item = get(mockHosts).find((mockHost) => mockHost.id === view.id);
 
 				if (item) item.viewOptions = view.viewOptions;
 			});
 
-			return get(views).length;
+			return get(displayedHosts).length;
 		}
 	},
 };

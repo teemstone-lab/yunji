@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button, Chevron, Dropdown, DropdownItem } from 'flowbite-svelte';
-	import { HostDataType, mockHosts, views } from '../liquidGaugesViewStroe';
+	import { HostDataType, mockHosts, displayedHosts } from '../liquidGaugesViewStroe';
 
 	export let host: HostDataType;
 	export let index: number;
@@ -8,7 +8,7 @@
 	let openHosts: boolean = false;
 
 	const changeHost = (selectedHost: any) => {
-		$views[index] = selectedHost as HostDataType;
+		$displayedHosts[index] = selectedHost as HostDataType;
 
 		openHosts = false;
 	};
@@ -45,10 +45,11 @@
 >
 	{#each $mockHosts as mockHost}
 		<DropdownItem
-			class="flex w-full flex-col {$views.map((view) => view.id).includes(String(mockHost.id))
+			class="flex w-full flex-col {$displayedHosts
+				.map((displayedHost) => displayedHost.id)
+				.includes(String(mockHost.id))
 				? 'text-blue-600'
-				: // ? 'cursor-default text-gray-300 hover:bg-transparent'
-				  'hover:bg-blue-100'}"
+				: 'hover:bg-blue-100'}"
 			on:click="{() => changeHost(mockHost)}"
 		>
 			<span>{mockHost.name}</span>
