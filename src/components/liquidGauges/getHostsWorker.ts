@@ -7,34 +7,26 @@ onmessage = function (event: MessageEvent) {
 	let isUpdating: boolean = false;
 
 	const callMsw = () => {
-		fetch(isUpdating ? url.hostsData : url.hosts, {
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		})
+		fetch(isUpdating ? url.hostsData : url.hosts)
 			.then((response) => response.json())
 			.then((data) => postMessage(data as HostDataType[]))
 			.catch((error) => console.error(error));
 	};
 
-	if (!isUpdating) {
-		callMsw();
+	callMsw();
 
-		setTimeout(() => {
-			fetch(url.hostsData, {
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-				.then((response) => response.json())
-				.then((data) => postMessage(data as HostDataType[]))
-				.catch((error) => console.error(error));
-		}, 100);
+	setTimeout(() => {
+		fetch(url.hostsData)
+			.then((response) => response.json())
+			.then((data) => postMessage(data as HostDataType[]))
+			.catch((error) => console.error(error));
+	}, 100);
 
-		isUpdating = true;
+	isUpdating = true;
+
+	if (isUpdating) {
+		setInterval(() => {
+			callMsw();
+		}, 2000);
 	}
-
-	setInterval(() => {
-		callMsw();
-	}, 2000);
 };

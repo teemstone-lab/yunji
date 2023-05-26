@@ -3,7 +3,7 @@
 
 	let width: number = Number(props.width) || 20;
 	let height: number = Number(props.height) || 20;
-	let style: string = String(props.style) || '';
+	let style: string = props.style ? String(props.style) : '';
 	let strokeWidth: number = Number(props.strokeWidth) || 1.5;
 	let solid: boolean = Boolean(props.solid) || false;
 </script>
