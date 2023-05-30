@@ -19,7 +19,7 @@
 </script>
 
 <Button
-	btnClass="w-[calc(100%-40px)] flex flex-col px-3 text-lg font-bold hover:text-blue-600 transition-all text-left"
+	btnClass="w-[calc(100%-48px)] flex flex-col px-3 text-lg font-bold hover:text-blue-600 transition-all text-left"
 	data-placement="right-end"
 	on:click="{() => (openHosts = true)}"
 >
