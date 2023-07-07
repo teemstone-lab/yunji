@@ -429,8 +429,8 @@
 		animation = 'animate-move';
 		timerId = setInterval(() => {
 			list = mockHosts(7000);
-			console.log(list);
-			console.log(Date.now());
+			// console.log(list);
+			// console.log(Date.now());
 		}, 3000);
 	};
 
