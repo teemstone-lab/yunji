@@ -39,7 +39,7 @@
 		worker2 = new Worker(new URL('fibonacci-worker.ts', import.meta.url));
 
 		worker2.onmessage = function (event) {
-			console.log(event);
+			// console.log(event);
 			const { result, elapsedTime } = event.data as EventData;
 
 			const divResult2 = document.getElementById('result2') as HTMLDivElement;
