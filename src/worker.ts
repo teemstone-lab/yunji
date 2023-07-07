@@ -13,7 +13,7 @@ onmessage = (event: MessageEvent<NewHostType | MockHostType[]>) => {
 	const newHosts = event.data as NewHostType;
 	const isNewHostsCase: boolean = newHosts.limit && newHosts.isAllTrue ? true : false;
 	// 메인 스레드에서 메세지를 보내면 동작
-	console.log('보내졌어용:', event.data);
+	// console.log('보내졌어용:', event.data);
 
 	const numberChecker = (num: number) => {
 		const checkNumSize = Math.round(num) === 1 ? true : false;
